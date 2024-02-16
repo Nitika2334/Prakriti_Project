@@ -55,7 +55,8 @@ The application can be deployed to a hosting service such as Vercel or Heroku fo
 
 ## Contributors
 
-- Your Name (@your-github-username)
+nitika()
+ishika()
 
 ## License
 

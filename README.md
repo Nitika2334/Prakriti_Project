@@ -55,8 +55,9 @@ The application can be deployed to a hosting service such as Vercel or Heroku fo
 
 ## Contributors
 
-nitika()
-ishika()
+Nitika(@Nitika2334)
+
+Ishika Baliyan(@IshikaBaliyan)
 
 ## License
 

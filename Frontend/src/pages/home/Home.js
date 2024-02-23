@@ -1,13 +1,14 @@
 import React from 'react'
 import Slider from "../../components/slider/Slider"
 import HomeInfoBox from './HomeInfoBox';
+import "./HomeStyles.scss"
 
 const home = props => {
   return (
     <>
     <Slider/>
     <section>
-      <div className="conatiner">
+      <div className="container">
         <HomeInfoBox/>
 
       </div>

@@ -1,6 +1,7 @@
 import React from 'react'
 import "./Carousel.scss"
 import { Link } from 'react-router-dom'
+import { shortenText } from '../../utils'
 
 const CarouselItem = ({url,name,price, description}) => {
   return (
@@ -14,11 +15,11 @@ const CarouselItem = ({url,name,price, description}) => {
             </p>
 
             <h4>
-                {name}
+                {shortenText(name,18)}
             </h4>
 
             <p className="--mb">
-                {description}
+                {shortenText(description,26)}
             </p>
         </Link>
         <button className="--btn --btn-primary">

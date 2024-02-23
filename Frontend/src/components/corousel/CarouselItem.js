@@ -12,14 +12,19 @@ const CarouselItem = ({url,name,price, description}) => {
             <p className="price">
                 {`$${price}`}
             </p>
+
             <h4>
                 {name}
             </h4>
+
             <p className="--mb">
                 {description}
-
             </p>
         </Link>
+        <button className="--btn --btn-primary">
+            Add to Cart
+        </button>
+
       
     </div>
   )

@@ -16,7 +16,9 @@ const Slider = () => {
     const nextSlide = ()=>{
         setCurrentSlide( currentSlide === slideLength-1 ?0 :currentSlide+1)
     };
-    const prevSlide = ()=>{};
+    const prevSlide = ()=>{
+        setCurrentSlide( currentSlide === 0 ?slideLength-1:currentSlide-1)
+    };
     
 
   return <div className="slider">

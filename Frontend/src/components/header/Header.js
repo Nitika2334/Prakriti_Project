@@ -53,8 +53,6 @@ const Header = () => {
             <Logo />
                 <FaTimes size={22} color="#fff" onClick={hideMenu} />
 
-            
-
             </li>
 
             <li>

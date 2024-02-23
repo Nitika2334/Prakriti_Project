@@ -1,15 +1,23 @@
 import React, { useState } from 'react'
+import "./Slider.scss"
 import {AiOutlineArrowLeft,AiOutlineArrowRight } from "react-icons/ai"
-import { sliderData } from './slider-data';
-import { useNavigate }  from "react-router-dom";
+import { sliderData } from './slider-data'
+import { useNavigate }  from "react-router-dom"
 
 
 const Slider = () => {
-    const [currentSlide,setCurrentSlide] = useState(0)
+    
     const navigate = useNavigate()
-
+    const [currentSlide,setCurrentSlide] = useState(0)
+    const slideLength = sliderData.length
+    const autoScroll = true
+    let slideInterval
+    const intervalTime = 5000
+    const nextSlide = ()=>{
+        setCurrentSlide( currentSlide === slideLength-1 ?0 :currentSlide+1)
+    };
     const prevSlide = ()=>{};
-    const nextSlide = ()=>{};
+    
 
   return <div className="slider">
     <AiOutlineArrowLeft className="arrow prev"  onClick={prevSlide} />

@@ -2,7 +2,7 @@
 
 This is a modern e-commerce platform for nurseries built with React.js for the frontend and Express.js/Node.js for the backend. It enables users to browse, purchase, and pay for nursery plants and gardening products using fintech digital wallets.
 
-## Project Overview
+## Project Overview:
 
 ### Objective:
 

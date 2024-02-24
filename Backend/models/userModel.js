@@ -1,10 +1,9 @@
-// const mongoose = require("mongoose");
-// const bcrypt = require("bcryptjs");
-// const { ObjectId } = mongoose.Schema;
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs" ;
+import bcrypt from "bcryptjs";
 
-const userSchema = new mongoose.Schema(
+const { Schema, model } = mongoose;
+
+const userSchema = new Schema(
   {
     name: {
       type: String,
@@ -12,19 +11,18 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: [true, "Please add a email"],
+      required: [true, "Please add an email"],
       unique: true,
       trim: true,
       match: [
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        "Please enter a valid emaial",
+        "Please enter a valid email",
       ],
     },
     password: {
       type: String,
       required: [true, "Please add a password"],
-      minLength: [6, "Password must be up to 6 characters"],
-      //   maxLength: [23, "Password must not be more than 23 characters"],
+      minLength: [6, "Password must be at least 6 characters"],
     },
     role: {
       type: String,
@@ -34,7 +32,6 @@ const userSchema = new mongoose.Schema(
     },
     photo: {
       type: String,
-      required: [true, "Please add a photo"],
       default: "https://i.ibb.co/4pDNDk1/avatar.png",
     },
     phone: {
@@ -45,7 +42,7 @@ const userSchema = new mongoose.Schema(
       type: Object,
       // address, state, country
     },
-    wishlist: [{ type: ObjectId, ref: "Product" }],
+    wishlist: [{ type: Schema.Types.ObjectId, ref: "Product" }],
     balance: {
       type: Number,
       default: 0,
@@ -67,17 +64,20 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-//   Encrypt password before saving to DB
+// Encrypt password before saving to DB
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
 
-  // Hash password
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(this.password, salt);
-  this.password = hashedPassword;
-  next();
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    this.password = hashedPassword;
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
-export const User = mongoose.model("User", userSchema);
+export default model("User", userSchema);

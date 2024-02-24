@@ -7,7 +7,6 @@ const Footer = () => {
   return (
     <div className={styles.footer}>
         &copy; {year} All Rights Reserved 
-        Footer
     </div>
   )
 }

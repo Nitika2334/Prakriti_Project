@@ -50,6 +50,13 @@ const Home = () => {
           
         </div>
       </section>
+      <section>
+        <div className="container">
+          <PageHeading heading={"Mobile phones"} btnText={"Shop Now"}/>
+          <ProductCarousel products={productss}/>
+
+        </div>
+      </section>
     </>
   );
 };

@@ -1,12 +1,21 @@
+const cookieParser = require('cookie-parser');
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv').config(); // Load environment variables from .env file
+const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: ["https://localhost:3001", "https://prakriti.vercel.app"],
+    credentials: true
+  })
+);
 
 // Connect to MongoDB
 const MONGO_URI = process.env.MONGO_URI;
@@ -26,8 +35,12 @@ mongoose
   });
 
 // Routes
-app.get('/', (req, res) => {
-  res.send('Home Page');
+app.get('/', (req, res, next) => {
+  try {
+    res.send('Home Page');
+  } catch (err) {
+    next(err);
+  }
 });
 
 // Handle 404 errors

@@ -40,6 +40,14 @@ const Home = () => {
           <ProductCarousel products={productss}/>
         </div>
       </section>
+      <section className='--bt-grey'>
+        <div className="container">
+          <h4>
+            Categories
+            <ProductCarousel/>
+          </h4>
+        </div>
+      </section>
     </>
   );
 };

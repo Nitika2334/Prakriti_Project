@@ -5,6 +5,7 @@ import './HomeStyles.scss';
 import { productData } from '../../components/corousel/data';
 import CarouselItem from "../../components/corousel/CarouselItem"
 import ProductCarousel from '../../components/corousel/Carousel';
+import ProductCategory from './ProductCategory';
 
 const PageHeading = ({ heading, btnText }) => {
   return (
@@ -40,12 +41,13 @@ const Home = () => {
           <ProductCarousel products={productss}/>
         </div>
       </section>
-      <section className='--bt-grey'>
+      <section className="--bt-grey">
         <div className="container">
-          <h4>
+          <h3>
             Categories
-            <ProductCarousel/>
-          </h4>
+            </h3>
+            <ProductCategory/>
+          
         </div>
       </section>
     </>

@@ -1,8 +1,10 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-const { ObjectId } = mongoose.Schema;
+// const mongoose = require("mongoose");
+// const bcrypt = require("bcryptjs");
+// const { ObjectId } = mongoose.Schema;
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs" ;
 
-const userSchema = mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -78,5 +80,4 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-const User = mongoose.model("User", userSchema);
-module.exports = User;
+export const User = mongoose.model("User", userSchema);

@@ -5,10 +5,10 @@ import { shortenText } from '../../utils'
 
 const CarouselItem = ({url,name,price, description}) => {
   return (
-    <div className="caraouselItem">
+    <div className="carouselItem">
         <Link to ="/product-details">
 
-            <img className="prouct--imaeg"src={url} alt="product" />
+            <img className="product--image" src={url} alt="product" />
 
             <p className="price">
                 {`$${price}`}
@@ -22,7 +22,7 @@ const CarouselItem = ({url,name,price, description}) => {
                 {shortenText(description,26)}
             </p>
         </Link>
-        <button className="--btn --btn-primary">
+        <button className="--btn --btn-primary --btn-block">
             Add to Cart
         </button>
 

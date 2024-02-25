@@ -107,6 +107,20 @@ export const logoutUser=asyncHandler(async (req,res)=>{
     return res.status(200).json({message: "Successfully Logged Out"});
 });
 
+//Get user
+export const getUser=asyncHandler (async(req,res)=>{
+    // res.send("Get user...");
+    const user=await User.findById(req.user._id).select("-password");
+    if(user)
+    {
+        res.status(200).json(user);
+    }
+    else{
+        res.status(400);
+        throw new Error("User not found");
+    }
+});
+
 const errorHandler=(statusCode, message)=>{
     const error=new Error();
     error.statusCode=statusCode;

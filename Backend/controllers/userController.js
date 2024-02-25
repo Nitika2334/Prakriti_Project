@@ -68,6 +68,11 @@ export const registerUser = asyncHandler(async (req, res) => {
 });
 
 
+//login user
+export const loginUser=asyncHandler(async(req,res)=>{
+    res.send("login user.....")
+});
+
 
 // export const registerUser = async (req,res,next) =>{
 //     const {name, email, password} = req.body;

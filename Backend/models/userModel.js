@@ -66,20 +66,20 @@ const userSchema = new Schema(
 );
 
 // Encrypt password before saving to DB
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
+// userSchema.pre("save", async function (next) {
+//   if (!this.isModified("password")) {
+//     return next();
+//   }
 
-  try {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(this.password, salt);
-    this.password = hashedPassword;
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
+//   try {
+//     const salt = await bcrypt.genSalt(10);
+//     const hashedPassword = await bcrypt.hash(this.password, salt);
+//     this.password = hashedPassword;
+//     next();
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
-export default userSchema
+export default User=mongoose.model("user",userSchema)
 // export default model("User", userSchema);

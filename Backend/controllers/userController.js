@@ -1,15 +1,16 @@
 //Import necessary modules
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import userSchema from "../models/userSchema.js";
+import bcryptjs from "bcryptjs";
+import {User} from "../models/userSchema.js";
 
 // Function to generate JWT token
 const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
+    return jwt.sign({ id }, `${process.env.JWT_SECRET}`, {
         expiresIn: "1d"
     });
 }
+
 
 // Register user route
 export const registerUser = asyncHandler(async (req, res) => {
@@ -20,24 +21,23 @@ export const registerUser = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("Please fill in all required fields");
     }
-
     if (password.length < 6) {
         res.status(400);
         throw new Error("Password must be at least 6 characters long");
     }
 
     // Check if user exists
-    const userExists = await userSchema.findOne({ email });
+    const userExists = await User.findOne({ email });
     if (userExists) {
         res.status(400);
         throw new Error("Email has already been registered");
     }
 
     // Create new user
-    const user = await userSchema.create({
+    const user = new User({
         name,
         email,
-        password
+        password,
     });
 
     // Generate token
@@ -66,3 +66,19 @@ export const registerUser = asyncHandler(async (req, res) => {
         throw new Error("Invalid user data");
     }
 });
+
+
+
+// export const registerUser = async (req,res,next) =>{
+//     const {name, email, password} = req.body;
+//     const hashedPassword = bcryptjs.hashSync(password,10);
+//     const newUser = new User({name, email,password:  hashedPassword});
+
+//     try{
+//         await newUser.save();
+//         res.status(201).json('user created successfully');
+//     }catch(error){
+//         next(error);
+//     }
+    
+// };

@@ -1,4 +1,4 @@
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
@@ -66,7 +66,7 @@ const userSchema = new Schema(
 );
 
 // Encrypt password before saving to DB
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function(next) {
   if (!this.isModified("password")) {
     return next();
   }
@@ -81,6 +81,4 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-
-export default userSchema
-// export default model("User", userSchema);
+export const User = model("user", userSchema);

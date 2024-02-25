@@ -95,6 +95,10 @@ export const loginUser = async(req,res,next) => {
     }
 };
 
+export const logoutUser=asyncHandler(async (req,res)=>{
+    // res.send("Logout");
+})
+
 const errorHandler=(statusCode, message)=>{
     const error=new Error();
     error.statusCode=statusCode;

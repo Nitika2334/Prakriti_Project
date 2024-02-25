@@ -97,7 +97,15 @@ export const loginUser = async(req,res,next) => {
 
 export const logoutUser=asyncHandler(async (req,res)=>{
     // res.send("Logout");
-})
+    res.cookie("token", "", {
+        path: "/",
+        httpOnly: true,
+        expires: new Date(0),
+        // secure:true,
+        // samesite:none,
+    });
+    return res.status(200).json({message: "Successfully Logged Out"});
+});
 
 const errorHandler=(statusCode, message)=>{
     const error=new Error();

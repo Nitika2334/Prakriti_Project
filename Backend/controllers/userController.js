@@ -1,8 +1,8 @@
-//Import necessary modules
+// Import necessary modules
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
-import {User} from "../models/userSchema.js";
+import { User } from "../models/userSchema.js";
 
 // Function to generate JWT token
 const generateToken = (id) => {
@@ -10,7 +10,6 @@ const generateToken = (id) => {
         expiresIn: "1d"
     });
 }
-
 
 // Register user route
 export const registerUser = asyncHandler(async (req, res) => {
@@ -42,7 +41,6 @@ export const registerUser = asyncHandler(async (req, res) => {
 
     try {
         await user.save();
-
     } catch (error) {
         console.log(error);
     }
@@ -74,29 +72,28 @@ export const registerUser = asyncHandler(async (req, res) => {
     }
 });
 
-
-//login user
-export const loginUser = async(req,res,next) => {
-    const {email, password } = req.body;
-    try{
-        const validUser = await User.findOne({email});
-        if(!validUser) return next(errorHandler(404,"user not found"));
-        const validPassword = bcryptjs.compareSync(password,validUser.password);
-        if(!validPassword) return next(errorHandler(401,"wrong credentials"));
-        const token = jwt.sign({id: validUser._id}, `${process.env.JWT_SECRET}`);
-        const rest={...validUser._doc};
+// Login user route
+export const loginUser = async (req, res, next) => {
+    const { email, password } = req.body;
+    try {
+        const validUser = await User.findOne({ email });
+        if (!validUser) return next(errorHandler(404, "User not found"));
+        const validPassword = bcryptjs.compareSync(password, validUser.password);
+        if (!validPassword) return next(errorHandler(401, "Invalid credentials"));
+        const token = jwt.sign({ id: validUser._id }, `${process.env.JWT_SECRET}`);
+        const rest = { ...validUser._doc };
         delete rest.password;
         res
-        .cookie('access_token',token,{httpOnly: true})
-        .status(200)
-        .json(rest)
-    }catch(error){
-        next(error)
+            .cookie('access_token', token, { httpOnly: true })
+            .status(200)
+            .json(rest);
+    } catch (error) {
+        next(error);
     }
 };
 
-export const logoutUser=asyncHandler(async (req,res)=>{
-    // res.send("Logout");
+// Logout user route
+export const logoutUser = asyncHandler(async (req, res) => {
     res.cookie("token", "", {
         path: "/",
         httpOnly: true,
@@ -104,77 +101,72 @@ export const logoutUser=asyncHandler(async (req,res)=>{
         // secure:true,
         // samesite:none,
     });
-    return res.status(200).json({message: "Successfully Logged Out"});
+    return res.status(200).json({ message: "Successfully logged out" });
 });
 
-//Get user
-export const getUser=asyncHandler (async(req,res)=>{
-    // res.send("Get user...");
-    const user=await User.findById(req.user._id).select("-password");
-    if(user)
-    {
+// Get user details route
+export const getUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id).select("-password");
+    if (user) {
         res.status(200).json(user);
-    }
-    else{
+    } else {
         res.status(400);
         throw new Error("User not found");
     }
 });
 
-const errorHandler=(statusCode, message)=>{
-    const error=new Error();
-    error.statusCode=statusCode;
-    error.message=message;
+// Middleware to handle errors
+const errorHandler = (statusCode, message) => {
+    const error = new Error(message);
+    error.statusCode = statusCode;
     return error;
 };
 
-// export const loginUser=asyncHandler(async(req,res)=>{
-//     const {email,password} =req.body;
+// Update user details route
+export const updateUser = asyncHandler(async (req, res,next) => {
+    const { name, phone, address } = req.body;
+    try {
+        const user = await User.findById(req.user._id);
+        if (user) {
+            user.name = name || user.name;
+            user.phone = phone || user.phone;
+            user.address = address || user.address;
+            const updatedUser = await user.save();
+            res.status(200).json(updatedUser);
+        } else {
+            res.status(404);
+            throw new Error("User not found");
+        }
+    } catch (error) {
+        next(error);
+    }
+});
 
-//     //Validate Request
-//     if(!email || !password){
-//         res.status(400);throw new Error("Please add email and password")
-//     }
+// Check login status route
+export const getLoginStatus = asyncHandler(async (req, res) => {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.json(false);
+    }
+    try {
+        const verified = jwt.verify(token, `${process.env.JWT_SECRET}`);
+        if (verified) {
+            res.json(true);
+        } else {
+            res.json(false);
+        }
+    } catch (error) {
+        res.json(false);
+    }
+});
 
-//     //check if user exists
-//     const userE = await User.findOne({ email });
-
-//     //user password, check if the password is correct
-//     const passwordIsCorrect= bcryptjs.compareSync(password,User.password)
-
-//     //Generate token
-//     const token = generateToken(userE._id);
-//     const newUser = await User.findOne({ email }).select("-password");
-//     if(userE && passwordIsCorrect){
-//         res.cookie("token", token, {
-//             path: "/",
-//             httpOnly: true,
-//             expires: new Date(Date.now() + 1000 * 86400),
-//             // secure:true,
-//             // samesite:none,
-//         });
-
-//         // Send user data
-//         res.status(201).json(newUser);
-//     }
-//     else{
-//         res.status(400);
-//         throw new Error("Invalid email or password");
-//     }
-
-// });
-
-
-// export const registerUser = async (req,res,next) =>{
-//     const {name, email, password} = req.body;
-//     const hashedPassword = bcryptjs.hashSync(password,10);
-//     const newUser = new User({name, email,password:  hashedPassword});
-
-//     try{
-//         await newUser.save();
-//         res.status(201).json('user created successfully');
-//     }catch(error){
-//         next(error);
-//     }
-    
-// };
+// Update user photo route
+export const updatePhoto = asyncHandler(async (req, res) => {
+    // // Logic to update user's photo
+    // res.send("Photo updated successfully");
+    const {photo}=req.body;
+    const user=await User.findById(req.user._id);
+    user.photo=photo
+    const updatedUser=await user.save();
+    res.status(200).json(updatedUser);
+});

@@ -2,7 +2,7 @@
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { User } from "../models/userModel";
+import userSchema from "../models/userSchema.js";
 
 // Function to generate JWT token
 const generateToken = (id) => {
@@ -27,14 +27,14 @@ export const registerUser = asyncHandler(async (req, res) => {
     }
 
     // Check if user exists
-    const userExists = await User.findOne({ email });
+    const userExists = await userSchema.findOne({ email });
     if (userExists) {
         res.status(400);
         throw new Error("Email has already been registered");
     }
 
     // Create new user
-    const user = await User.create({
+    const user = await userSchema.create({
         name,
         email,
         password

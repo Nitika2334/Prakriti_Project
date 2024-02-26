@@ -1,5 +1,6 @@
-import { createSlice,createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice,createAsyncThunk } from '@reduxjs/toolkit';
 import authService from './authService';
+import {toast} from "react-toastify";
 
 const initialState = {
     isLoggedIn :false,
@@ -44,6 +45,28 @@ const authSlice = createSlice({
          state.message ="";
 
     },
+  },
+  extraReducers:(builder)=>
+  {
+    builder
+    //register user
+          .addCase(register.pending , (state)=>{
+            state.isLoading= true;
+          })
+          .addCase(register.fulfilled,(state,action )=>{
+            state.isLoading= false;
+            state.isSuccess= true;
+            state.isLoggedIn=true;
+            state.user = action.payload;
+            toast.success("registration successful");
+          })
+          .addCase(register.rejected,(state,action )=>{
+            state.isLoading= false;
+            state.isError= true;
+            state.message=action.payload;
+            state.user = null;
+            toast.success("action payload");
+          })
   }
 });
 

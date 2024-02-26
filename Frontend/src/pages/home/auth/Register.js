@@ -8,6 +8,7 @@ import { validateEmail } from "../../../utils"
 import {useDispatch, useSelector } from "react-redux"
 import { RESET_AUTH, register  } from "../../../redux/features/auth/authSlice"
 import Loader from "../../../components/loader/Loader"
+// import { useEffect } from "react"
 
 
 
@@ -28,7 +29,7 @@ const Register = () => {
       const{name,value}=e.target
       setFormData({...formData,[name]:value })
 
-    }
+    };
     const registerUser=async(e)=>{
       e.preventDefault();
     if(!email || !password)
@@ -56,7 +57,7 @@ const Register = () => {
       email,
       password
     }
-    await dispatch (register(userData));
+    dispatch(register(userData));
   
 
     } 
@@ -66,7 +67,7 @@ const Register = () => {
         navigate("/")
 
       }
-      dispatch(RESET_AUTH())
+      dispatch(RESET_AUTH());
 
     },[isSuccess, isLoggedIn,dispatch,navigate])
     
@@ -104,7 +105,7 @@ const Register = () => {
               type = "password"
               placeholder='Password'  
               required 
-              name = {"password"}
+              name = "password"
               value = {password}
               onChange={handleInputChange}
               /> 

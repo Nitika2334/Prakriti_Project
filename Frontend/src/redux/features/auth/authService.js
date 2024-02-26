@@ -17,3 +17,5 @@ const register = async({userData})=>
     register
 }
 export default authService;
+
+

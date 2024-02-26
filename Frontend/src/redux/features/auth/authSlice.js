@@ -42,8 +42,7 @@ const authSlice = createSlice({
          state.isError=false;
          state.isSuccess=false;
          state.isLoading =false;
-         state.message ="";
-
+         state.message = "";
     },
   },
   extraReducers:(builder)=>
@@ -70,6 +69,6 @@ const authSlice = createSlice({
   }
 });
 
-export const {RESET_AUTH} = authSlice.actions
+export const {RESET_AUTH} = authSlice.actions;
 
-export default authSlice.reducer
+export default authSlice.reducer;

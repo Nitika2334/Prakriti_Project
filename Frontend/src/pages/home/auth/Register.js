@@ -1,8 +1,14 @@
-import React ,{useState} from "react"
+import React ,{ useState} from "react"
 import loginImg from "../../../assets/login.png"
 import {Link} from "react-router-dom"
 import Card from "../../../components/card/Card"
 import styles from "./auth.module.scss"
+import { toast } from "react-toastify"
+import { validateEmail } from "../../../utils"
+import {useDispatch } from "react-redux"
+import { register } from "../../../redux/features/auth/authSlice"
+
+
 const initialState ={
   name:"",
   email: "",
@@ -12,13 +18,44 @@ const initialState ={
 const Register = () => {
     const [formData,setFormData] = useState(initialState)
     const{name,email,password,cPassword} = formData;
+    const dispatch = useDispatch();
     const  handleInputChange = (e)=>
     {
       const{name,value}=e.target
       setFormData({...formData,[name]:value })
 
     }
-    const registerUser=()=>{} 
+    const registerUser=async(e)=>{
+      e.preventDefault();
+    if(!email || !password)
+    {
+      return toast.error("ALL feilds are required");
+    }
+    if(password.length<6)
+    {
+      return toast.error("Password must be  upto 6 characters");
+    }
+    if(!validateEmail(email))
+    {
+      return toast.error("Please enter a valid email");
+    }
+    if(password !== cPassword)
+    {
+      return toast.error("passwords do not match ")
+    }
+    if(!validateEmail)
+    {
+      return toast.error("Please enter a valid email");
+    }
+    const userData = {
+      name,
+      email,
+      password
+    }
+    await dispatch (register(userData));
+  
+
+    } 
   return (
     <section className={`container ${styles.auth}`}>
    
@@ -50,7 +87,7 @@ const Register = () => {
               type = "password"
               placeholder='Password'  
               required 
-              name = "password"
+              name = {"password"}
               value = {password}
               onChange={handleInputChange}
               /> 

@@ -5,8 +5,10 @@ import Card from "../../../components/card/Card"
 import styles from "./auth.module.scss"
 import { toast } from "react-toastify"
 import { validateEmail } from "../../../utils"
-import {useDispatch } from "react-redux"
+import {useDispatch, useSelector } from "react-redux"
 import { register } from "../../../redux/features/auth/authSlice"
+import Loader from "../../../components/loader/Loader"
+
 
 
 const initialState ={
@@ -18,6 +20,7 @@ const initialState ={
 const Register = () => {
     const [formData,setFormData] = useState(initialState)
     const{name,email,password,cPassword} = formData;
+    const {isLoading,isLoggedIn,isSuccess} = useSelector((state)=>state.auth)
     const dispatch = useDispatch();
     const  handleInputChange = (e)=>
     {
@@ -57,6 +60,9 @@ const Register = () => {
 
     } 
   return (
+    <>
+    {isLoading && <Loader/>}
+   
     <section className={`container ${styles.auth}`}>
    
     
@@ -116,6 +122,7 @@ const Register = () => {
 
     </div>
   </section>
+  </>
   )
 
     

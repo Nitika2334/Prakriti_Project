@@ -1,12 +1,12 @@
-import React ,{ useState} from "react"
+import React ,{ useEffect, useState} from "react"
 import loginImg from "../../../assets/login.png"
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import Card from "../../../components/card/Card"
 import styles from "./auth.module.scss"
 import { toast } from "react-toastify"
 import { validateEmail } from "../../../utils"
 import {useDispatch, useSelector } from "react-redux"
-import { register } from "../../../redux/features/auth/authSlice"
+import { RESET_AUTH, register  } from "../../../redux/features/auth/authSlice"
 import Loader from "../../../components/loader/Loader"
 
 
@@ -22,6 +22,7 @@ const Register = () => {
     const{name,email,password,cPassword} = formData;
     const {isLoading,isLoggedIn,isSuccess} = useSelector((state)=>state.auth)
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const  handleInputChange = (e)=>
     {
       const{name,value}=e.target
@@ -59,6 +60,16 @@ const Register = () => {
   
 
     } 
+    useEffect (()=>{
+      if(isSuccess && isLoggedIn)
+      {
+        navigate("/")
+
+      }
+      dispatch(RESET_AUTH())
+
+    },[isSuccess, isLoggedIn,dispatch,navigate])
+    
   return (
     <>
     {isLoading && <Loader/>}

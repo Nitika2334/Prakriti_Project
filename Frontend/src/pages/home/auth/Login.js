@@ -8,7 +8,7 @@ import styles from "./auth.module.scss"
 const Login = () => {
     const [email, setEmail ] = useState("")
     const[password,setPassword] = useState("")
-    const loginUser=()=>{} 
+    const loginUser=(e)=>{} 
   return (
     <section className={`container ${styles.auth}`}>
     <div className={styles.img}>

@@ -57,7 +57,7 @@ const Register = () => {
       email,
       password
     }
-    dispatch(register(userData));
+     await dispatch(register(userData));
   
 
     } 

@@ -8,7 +8,6 @@ import { validateEmail } from "../../../utils"
 import {useDispatch, useSelector } from "react-redux"
 import { RESET_AUTH, register  } from "../../../redux/features/auth/authSlice"
 import Loader from "../../../components/loader/Loader"
-// import { useEffect } from "react"
 
 
 
@@ -24,48 +23,31 @@ const Register = () => {
     const {isLoading,isLoggedIn,isSuccess} = useSelector((state)=>state.auth)
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     const  handleInputChange = (e)=>
     {
       const{name,value}=e.target
       setFormData({...formData,[name]:value })
 
     };
+
     const registerUser=async(e)=>{
       e.preventDefault();
-    if(!email || !password)
-    {
-      return toast.error("ALL feilds are required");
-    }
-    if(password.length<6)
-    {
-      return toast.error("Password must be  upto 6 characters");
-    }
-    if(!validateEmail(email))
-    {
-      return toast.error("Please enter a valid email");
-    }
-    if(password !== cPassword)
-    {
-      return toast.error("passwords do not match ")
-    }
-   // if(!validateEmail)
-   // {
-     // return toast.error("Please enter a valid email");
-   // }
-    const userData = {
-      name,
-      email,
-      password
-    }
-      dispatch(register(userData));
 
-    } 
-    useEffect (()=>{
-      if(isSuccess && isLoggedIn)
-      {
-        navigate("/")
-
+      if(!email || !password)return toast.error("ALL feilds are required");
+      if(!validateEmail(email)) return toast.error("Please enter a valid email");
+      
+      const userData = {
+        email,
+        password
       }
+
+      dispatch(register(userData));
+    } 
+
+    useEffect (()=>{
+
+      if(isSuccess && isLoggedIn) navigate("/");
       dispatch(RESET_AUTH());
 
     },[isSuccess, isLoggedIn,dispatch,navigate])
@@ -129,8 +111,6 @@ const Register = () => {
   </>
   )
 
-    
-  
  }
 
 export default Register;

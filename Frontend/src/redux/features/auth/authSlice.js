@@ -44,9 +44,7 @@ export const login=createAsyncThunk(
 
 
 //Logout user
-export const logout=createAsyncThunk(
-  "auth/logout",
-  async (_,thunkAPI) => {
+export const logout=createAsyncThunk("auth/logout",async (_,thunkAPI) => {
     try {
       return await authService.logout();
     } catch (error) {
@@ -58,7 +56,18 @@ export const logout=createAsyncThunk(
   }
 );
 
-
+//getLogin Status
+export const getLoginStatus=createAsyncThunk("auth/getLoginStatus",async (_,thunkAPI) => {
+  try {
+    return await authService.getLoginStatus();
+  } catch (error) {
+    const message=(error.response && error.response.data && error.response.data.message) 
+    || error.message
+    || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+}
+);
 
 const authSlice = createSlice({
   name: "auth",
@@ -74,7 +83,9 @@ const authSlice = createSlice({
   extraReducers:(builder)=>
   {
     builder
+
     //register user
+
       .addCase(register.pending , (state)=>{
         state.isLoading= true;
       })
@@ -92,7 +103,10 @@ const authSlice = createSlice({
         state.user = null;
         toast.success(action.payload);
       })
+
+
       //login user
+
       .addCase(login.pending , (state)=>{
         state.isLoading= true;
       })
@@ -112,6 +126,7 @@ const authSlice = createSlice({
       })
 
       //logout user
+
       .addCase(logout.pending , (state)=>{
         state.isLoading= true;
       })
@@ -128,6 +143,27 @@ const authSlice = createSlice({
         state.isError= true;
         state.message=action.payload;
         toast.success(action.payload);
+      })
+
+
+      //getLoginStatus
+      
+      .addCase(getLoginStatus.pending , (state)=>{
+        state.isLoading= true;
+      })
+      .addCase(getLoginStatus.fulfilled,(state,action)=>{
+        state.isLoading= false;
+        state.isSuccess= true;
+        state.isLoggedIn=action.payload;
+        console.log(action.payload);
+        if(action.payload.message==="invalid signature"){
+          state.isLoggedIn=false;
+        }
+      })
+      .addCase(getLoginStatus.rejected,(state,action )=>{
+        state.isLoading= false;
+        state.isError= true;
+        state.message=action.payload;
       })
 
   }

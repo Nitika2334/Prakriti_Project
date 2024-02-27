@@ -142,7 +142,7 @@ export const updateUser = asyncHandler(async (req, res,next) => {
     }
 });
 
-// Check login status route
+//get login status route
 export const getLoginStatus = asyncHandler(async (req, res) => {
     const token = req.cookies.token;
     if (!token) {

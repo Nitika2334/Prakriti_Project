@@ -94,7 +94,7 @@ export const loginUser = async (req, res, next) => {
 
 // Logout user route
 export const logoutUser = asyncHandler(async (req, res) => {
-    res.cookie("token", "", {
+    res.cookie("access_token", "", {
         path: "/",
         httpOnly: true,
         expires: new Date(0),

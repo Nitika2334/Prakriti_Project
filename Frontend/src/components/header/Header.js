@@ -4,6 +4,9 @@ import { Link, NavLink } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { FaTimes } from 'react-icons/fa';
+import { useDispatch } from "react-redux";
+import {useNavigate} from "react-router-dom";
+import { RESET_AUTH, logout } from '../../redux/features/auth/authSlice';
 
 export const Logo = () => ( 
   <div className={styles.logo}>
@@ -20,6 +23,8 @@ const activeLink = (isActive) => (isActive ? `${styles.active}` : "");
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [scrollPage,setScrollPage] = useState(false);
+  const dispatch=useDispatch();
+  const navigate=useNavigate();
 
   const fixNavbar = ()=>{ 
     if(window.scrollY >50){
@@ -39,6 +44,12 @@ const Header = () => {
   const hideMenu = () => {
     setShowMenu(false);
   }
+
+  const logoutUser=async() =>{
+    dispatch(logout());
+    dispatch(RESET_AUTH);
+    navigate("/login");
+  };
 
   const cart = (
     <span className={styles.cart}>
@@ -85,6 +96,9 @@ const Header = () => {
               <NavLink to={"order-history"} className={activeLink(true)}>
                 My Order
               </NavLink>
+              <Link to={"/"} onClick={logoutUser}>
+                Logout
+              </Link>
             </span>
             {cart}
           </div>

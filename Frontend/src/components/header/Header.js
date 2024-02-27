@@ -7,6 +7,7 @@ import { FaTimes } from 'react-icons/fa';
 import { useDispatch } from "react-redux";
 import {useNavigate} from "react-router-dom";
 import { RESET_AUTH, logout } from '../../redux/features/auth/authSlice';
+import { ShowOnLogout,ShowOnLogin } from '../hiddenLink/hiddenLink';
 
 export const Logo = () => ( 
   <div className={styles.logo}>
@@ -87,18 +88,26 @@ const Header = () => {
           </ul>
           <div className={styles['header-right']}>
             <span className={styles.links}>
+            <ShowOnLogout>
               <NavLink to={"login"} className={activeLink(true)}>
                 Login
               </NavLink>
+              </ShowOnLogout>
+              <ShowOnLogout>
               <NavLink to={"register"} className={activeLink(true)}>
                 Register 
               </NavLink>
+              </ShowOnLogout>
+              <ShowOnLogin>
               <NavLink to={"order-history"} className={activeLink(true)}>
                 My Order
               </NavLink>
+              </ShowOnLogin>
+              <ShowOnLogin>
               <Link to={"/"} onClick={logoutUser}>
                 Logout
               </Link>
+              </ShowOnLogin>
             </span>
             {cart}
           </div>

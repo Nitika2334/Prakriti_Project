@@ -57,8 +57,7 @@ const Register = () => {
       email,
       password
     }
-     await dispatch(register(userData));
-  
+      dispatch(register(userData));
 
     } 
     useEffect (()=>{
@@ -74,58 +73,51 @@ const Register = () => {
   return (
     <>
     {isLoading && <Loader/>}
-   
     <section className={`container ${styles.auth}`}>
-   
-    
     <Card>
-  
     <div className={styles.form}>
         <h2>Register</h2>
         <form onSubmit = {registerUser}>
         <input 
-              type = "text"
-              placeholder = "Name"
-              required
-              name = "name"
-              value={name}
-              onChange={ handleInputChange }
-
-              />
-       <input 
-              type = "text"
-              placeholder = "Email"
-              required
-              name = "email"
-              value={email}
-              onChange={handleInputChange}
-
-              />
+            type = "text"
+            placeholder = "Name"
+            required
+            name = "name"
+            value={name}
+            onChange={ handleInputChange }
+            />
+        <input 
+            type = "text"
+            placeholder = "Email"
+            required
+            name = "email"
+            value={email}
+            onChange={handleInputChange}
+            />
         <input
-              type = "password"
-              placeholder='Password'  
-              required 
-              name = "password"
-              value = {password}
-              onChange={handleInputChange}
-              /> 
-              <input 
-              type = "password"
-              placeholder = "Confirm Password"
-              required
-              name = "cPassword"
-              value={cPassword}
-              onChange={handleInputChange}
-
-              />
-              <button type = "submit" className='--btn --btn-primary --btn-block'>
-                Register
-              </button>
-              </form>
-              <span className={styles.register}>
-                <p>Already have an account?</p>
-                <Link to="/login">login</Link>
-              </span>
+          type = "password"
+          placeholder='Password'  
+          required 
+          name = "password"
+          value = {password}
+          onChange={handleInputChange}
+          /> 
+        <input 
+          type = "password"
+          placeholder = "Confirm Password"
+          required
+          name = "cPassword"
+          value={cPassword}
+          onChange={handleInputChange}
+          />
+      <button type = "submit" className='--btn --btn-primary --btn-block'>
+        Register
+      </button>
+      </form>
+      <span className={styles.register}>
+        <p>Already have an account?</p>
+        <Link to="/login">login</Link>
+      </span>
 
     </div>
     </Card>

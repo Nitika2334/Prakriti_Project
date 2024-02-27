@@ -4,7 +4,7 @@ const BACKEND_URL = `${process.env.REACT_APP_BACKEND_URL}`;
 export const API_URL = `${BACKEND_URL}/api/users/`;
 
 //register user
-const register = async({userData})=>
+const register = async(userData)=>
 {
     const response = await axios.post(API_URL+ "register",userData,{
         withCredentials : true,
@@ -13,10 +13,9 @@ const register = async({userData})=>
 
 } 
 //login user
-const login = async({userData})=>
+const login = async(userData)=>
 {
-    const response = await axios.post(API_URL+ "login",userData 
-    )
+    const response = await axios.post(API_URL+ "login",userData )
     return response.data
 
 }

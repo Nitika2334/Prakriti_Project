@@ -1,7 +1,7 @@
 import React ,{useEffect, useState} from "react"
 
 import loginImg from "../../../assets/login.png"
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import Card from "../../../components/card/Card"
 import styles from "./auth.module.scss"
 import { useDispatch, useSelector } from "react-redux"

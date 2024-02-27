@@ -48,10 +48,10 @@ const Register = () => {
     {
       return toast.error("passwords do not match ")
     }
-    if(!validateEmail)
-    {
-      return toast.error("Please enter a valid email");
-    }
+   // if(!validateEmail)
+   // {
+     // return toast.error("Please enter a valid email");
+   // }
     const userData = {
       name,
       email,

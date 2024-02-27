@@ -5,7 +5,6 @@ import {Link, useNavigate} from "react-router-dom"
 import Card from "../../../components/card/Card"
 import styles from "./auth.module.scss"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
 import {login} from "../../../redux/features/auth/authSlice.js"
 import { RESET_AUTH } from "../../../redux/features/auth/authSlice"
 import {toast} from "react-toastify";

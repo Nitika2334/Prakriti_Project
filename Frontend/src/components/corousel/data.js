@@ -20,65 +20,65 @@ export const productData = [
   {
     id: 1,
     imageurl:
-      "https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHByb2R1Y3RzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-    name: "Colorful sneakers",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlErexkc0bMUPCKP7TZPID_IGYL6di2qCoQg&usqp=CAU",
+    name: "Aprons",
     price: "$19.99",
-    description: "Some text about the product..",
+    description: " ",
   },
   {
     id: 2,
     imageurl:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZHVjdHN8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
-    name: "Sport sneakers",
+      "https://images.squarespace-cdn.com/content/v1/596f7d5d17bffcd028cef774/1574618242655-CB19J89ZWHVELPW0OUAT/best+gardening+shoes.jpg?format=750w",
+    name: "Boots",
     price: "$21.99",
-    description: "Some text about the product..",
+    description: " ",
   },
   {
     id: 3,
     imageurl:
-      "https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjZ8fHByb2R1Y3RzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-    name: "iWatch",
+      "https://c.ndtvimg.com/2019-08/7u136q1g_gardening_625x300_08_August_19.jpg",
+    name: "Water Sprinkler",
     price: "$99.99",
-    description: "Some text about the product..",
+    description: " ",
   },
   {
     id: 4,
     imageurl:
-      "https://images.unsplash.com/photo-1610824352934-c10d87b700cc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mjl8fHByb2R1Y3RzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-    name: "Water Bottle",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8xW6kwUI0MzNeahX2M8wmqBylsze2cdTb1g&usqp=CAU",
+    name: "Seeds",
     price: "$14.99",
-    description: "Some text about the product..",
+    description: " ",
   },
   {
     id: 5,
     imageurl:
-      "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzB8fHByb2R1Y3RzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-    name: "Vans sneakers",
+      "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQnDXCivH-POpp3XQyTNWIBkxp8ax9WrxjVIla0FGj5DEkXzQrivhpXHC-CYnHn3uFqkpHHDrqmEAqcaBajUm5mFYzTu69gYhsz9ul3Kgc&usqp=CAE",
+    name: "Pots",
     price: "$38.99",
-    description: "Some text about the product..",
+    description: " ",
   },
   {
     id: 6,
     imageurl:
-      "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzV8fHByb2R1Y3RzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-    name: "Coco Noir",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXjrYiXDkQpKyO_1H9qZ5OBk2KfBXVuI_V4Q&usqp=CAU",
+    name: "Gloves",
     price: "$149.99",
-    description: "Some text about the product..",
+    description: " ",
   },
   {
     id: 7,
     imageurl:
-      "https://images.unsplash.com/photo-1589782182703-2aaa69037b5b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OTJ8fHByb2R1Y3RzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-    name: "Sunglasses",
+      "https://5.imimg.com/data5/SELLER/Default/2021/8/AC/XV/NM/113170/indian-type-gardening-khurpi.jpg",
+    name: "Tools",
     price: "$38.99",
-    description: "Some text about the product..",
+    description: " ",
   },
   {
     id: 8,
     imageurl:
-      "https://images.unsplash.com/photo-1625772452859-1c03d5bf1137?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fHByb2R1Y3RzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-    name: "Dove cream",
+      "https://rukminim2.flixcart.com/image/850/1000/xif0q/soil-manure/j/o/o/organic-leaf-compost-500-grams-manure-fertilizer-for-plants-original-imaggthwrffnqutf.jpeg?q=20&crop=false",
+    name: "Manure",
     price: "$49.99",
-    description: "Some text about the product..",
+    description: " ",
   },
 ];

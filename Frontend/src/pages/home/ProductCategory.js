@@ -9,18 +9,18 @@ import { useNavigate } from "react-router-dom";
 const categories = [
   {
     id: 1,
-    title: "Gadgets",
-    image: "https://i.ibb.co/5GVkd3m/c1.jpg",
+    title: "Succulents and Cacti",
+    image: "https://budsnblush.com/cdn/shop/products/Barrelcactus-echinocactus.jpg?v=1660561246",
   },
   {
     id: 2,
-    title: "Womens Fashion",
-    image: "https://i.ibb.co/nQKLjrW/c2.jpg",
+    title: "Rare and Exotic Plants",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwH1TairAFzWqZWELtmF3UQU1RpioHD6zJ1A&usqp=CAU",
   },
   {
     id: 3,
-    title: "Sport Sneakers",
-    image: "https://i.ibb.co/fNkBYgr/c3.jpg",
+    title: "Seasonal Plants",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSw-cUD6Ej2B-1csLjiBHy9Rr-INxTvzyLBCw&usqp=CAU",
   },
 ];
 

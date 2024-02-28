@@ -84,7 +84,7 @@ export const loginUser = async (req, res, next) => {
         const rest = { ...validUser._doc };
         delete rest.password;
         res
-            .cookie('access_token', token, { httpOnly: true })
+            .cookie('token', token, { httpOnly: true })
             .status(200)
             .json(rest);
     } catch (error) {
@@ -94,7 +94,7 @@ export const loginUser = async (req, res, next) => {
 
 // Logout user route
 export const logoutUser = asyncHandler(async (req, res) => {
-    res.cookie("access_token", "", {
+    res.cookie("token", "", {
         path: "/",
         httpOnly: true,
         expires: new Date(0),
@@ -106,7 +106,7 @@ export const logoutUser = asyncHandler(async (req, res) => {
 
 // Get user details route
 export const getUser = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id).select("-password");
+    const user = await User.findById(req.res.user._id).select("-password");
     if (user) {
         res.status(200).json(user);
     } else {
@@ -126,7 +126,7 @@ const errorHandler = (statusCode, message) => {
 export const updateUser = asyncHandler(async (req, res,next) => {
     const { name, phone, address } = req.body;
     try {
-        const user = await User.findById(req.user._id);
+        const user = await User.findById(req.res.user._id);
         if (user) {
             user.name = name || user.name;
             user.phone = phone || user.phone;
@@ -165,7 +165,7 @@ export const updatePhoto = asyncHandler(async (req, res) => {
     // // Logic to update user's photo
     // res.send("Photo updated successfully");
     const {photo}=req.body;
-    const user=await User.findById(req.user._id);
+    const user=await User.findById(req.res.user._id);
     user.photo=photo
     const updatedUser=await user.save();
     res.status(200).json(updatedUser);

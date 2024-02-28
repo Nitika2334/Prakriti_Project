@@ -4,7 +4,7 @@ import { User } from "../models/userSchema.js";
 
 export const protect=asyncHandler(async(req,res,next) =>{
     try {
-        const token=req.cookies.access_token;
+        const token=req.cookies.token;
         if(!token){
             res.status(401);
             throw new Error("Not authorized, please login");
@@ -21,8 +21,7 @@ export const protect=asyncHandler(async(req,res,next) =>{
             throw new Error("User not found");
         }
         res.user=user;
-        next(res);
-
+        next();
 
     } catch (error) {
         res.status(401);

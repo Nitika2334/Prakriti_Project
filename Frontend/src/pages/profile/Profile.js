@@ -37,8 +37,8 @@ const Profile = () => {
     }
   },[dispatch,user])
 
-  const saveProfile = async() => {
-
+  const saveProfile = async(e) => {
+    e.preventDefault()
   };
 
   const handleImageChange = async() => {
@@ -89,6 +89,7 @@ const Profile = () => {
                         name='name'
                         value={profile?.name}
                         onChange={handleInputChange}
+                        required
                       />
                     </p>
                     <p>

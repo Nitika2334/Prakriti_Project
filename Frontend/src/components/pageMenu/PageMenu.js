@@ -1,25 +1,26 @@
-import React from 'react'
-import "./PageMenu.js"
+import React from 'react';
+import "./PageMenu.scss";
+import {NavLink } from "react-router-dom";
 
 const PageMenu = () => {
   return (
     <div>
-      <nav className='--bgprimary --p --mb'>
+      <nav className="--bg-primary --p --mb">
         <ul className="home-links">
             <li>
-                <navlink to="/profile">
+                <NavLink to="/profile">
                     Profile
-                </navlink>
+                </NavLink>
             </li>
             <li>
-                <navlink to="/wallet">
+                <NavLink to="/wallet">
                     My Wallet
-                </navlink>
+                </NavLink>
             </li>
             <li>
-                <navlink to="/wishlist">
+                <NavLink to="/wishlist">
                     Wishlist
-                </navlink>
+                </NavLink>
             </li>
 
         </ul>

@@ -64,5 +64,3 @@ Ishika Baliyan(@IshikaBaliyan)
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-
-Feel free to customize this README file further to include any additional information or branding guidelines specific to your project.

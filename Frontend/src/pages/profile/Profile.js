@@ -3,7 +3,9 @@ import "./Profile.scss";
 import PageMenu from '../../components/pageMenu/PageMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../../components/card/Card';
-import { getUser } from '../../redux/features/auth/authSlice';
+import { getUser, updateUser } from '../../redux/features/auth/authSlice';
+import Loader from '../../components/loader/Loader.js'
+import { AiOutlineCloudUpload } from "react-icons/ai";
 
 const Profile = () => {
 
@@ -14,9 +16,16 @@ const Profile = () => {
     email:user?.email||"",
     phone:user?.phone||"",
     role:user?.role||"",
-    address:user?.address||{},
+    photo:user?.photo||"",
+    address:user?.address||{
+      address:user?.address.address || "",
+      state:user?.address.state || "",
+      country:user?.address.country|| "",
+    },
   }
   const [profile,setProfile]=useState(initialState);
+  const [profileImage,setProfileImage]=useState(null);
+  const [imagePreview, setImagePreview]=useState(null);
   const dispatch=useDispatch();
 
   useEffect(()=>{
@@ -32,17 +41,35 @@ const Profile = () => {
         email:user?.email||"",
         phone:user?.phone||"",
         role:user?.role||"",
-        address:user?.address||{},
+        photo:user?.photo||"",
+        address:user?.address||{
+          address:user?.address.address || "",
+          state:user?.address.state || "",
+          country:user?.address.country|| "",
+        },
       })
     }
   },[dispatch,user])
 
   const saveProfile = async(e) => {
     e.preventDefault()
+    const userData={
+      name:profile.name,
+      phone:profile.phone,
+      address:{
+        address:profile.address,
+        state:profile.state,
+        country:profile.country,
+      }
+    }
+
+    dispatch(updateUser(userData))
+    // console.log(userdata)
   };
 
-  const handleImageChange = async() => {
-
+  const handleImageChange = async(e) => {
+    setProfileImage(e.target.iles[0]);
+    setImagePreview(URL.createObjectURL(e.target.files[0]));
   };
 
   const  handleInputChange = (e)=>
@@ -52,9 +79,14 @@ const Profile = () => {
 
   };
 
+  const savePhoto= async()=>{
+    
+  }
+
   return (
     <>
       <section>
+        {isLoading && <Loader/>}
         <div className="container">
           <PageMenu />
           <h2>Profile</h2>
@@ -63,9 +95,20 @@ const Profile = () => {
               {!isLoading && (
                 <>
                   <div className="profile-photo">
-                    <h2>
-                      Profile Image
-                    </h2>
+                    <div>
+                      <img src={imagePreview===null ? user?.photo : imagePreview} alt="profile"/>
+                      <h3>
+                        Role:{profile.role}
+                      </h3>
+                      {imagePreview!==null && (
+                        <div className="--center-all">
+
+                        <button className="--btn --btn-secondary" onClick={savePhoto}>
+                          <AiOutlineCloudUpload size={18}/>Upload photo
+                        </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <form onSubmit={saveProfile}>
@@ -113,6 +156,7 @@ const Profile = () => {
                         name='phone'
                         value={profile?.phone}
                         onChange={handleInputChange}
+                        required
                       />
                     </p>
                     <p>
@@ -124,6 +168,7 @@ const Profile = () => {
                         name='address'
                         value={profile?.address?.address}
                         onChange={handleInputChange}
+                        required
                       />
                     </p>
 
@@ -136,6 +181,7 @@ const Profile = () => {
                         name='state'
                         value={profile?.address?.state}
                         onChange={handleInputChange}
+                        required
                       />
                     </p>
                     <p>
@@ -147,6 +193,7 @@ const Profile = () => {
                         name='country'
                         value={profile?.address?.country}
                         onChange={handleInputChange}
+                        required
                       />
                     </p>
                     <button className='--btn --btn-primary --btn-block'>

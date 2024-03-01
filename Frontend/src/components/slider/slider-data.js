@@ -18,7 +18,7 @@ export const sliderData = [
   },
   {
     image: "https://cdn.pixabay.com/photo/2016/06/14/16/19/carnivorous-plant-1456932_1280.jpg",
-    heading: "carnivoras plants",
+    heading: "Carnivoras plants",
     desc: "Up to 30% off on all onsale proucts.",
   },
   {

@@ -7,6 +7,10 @@ import { getUser, updateUser } from '../../redux/features/auth/authSlice';
 import Loader from '../../components/loader/Loader.js'
 import { AiOutlineCloudUpload } from "react-icons/ai";
 
+const cloud_name=`${process.env.REACT_APP_CLOUD_NAME}`;
+const upload_preset=`${process.env.REACT_APP_UPLOAD_PRESET}`
+const URL="https://res.cloudinary.com/dhhnvmoz0/image/upload/prakriti/sample.jpg"
+
 const Profile = () => {
 
   const {isLoading,user} = useSelector((state)=>state.auth)
@@ -68,7 +72,7 @@ const Profile = () => {
   };
 
   const handleImageChange = async(e) => {
-    setProfileImage(e.target.iles[0]);
+    setProfileImage(e.target.files[0]);
     setImagePreview(URL.createObjectURL(e.target.files[0]));
   };
 
@@ -79,8 +83,24 @@ const Profile = () => {
 
   };
 
-  const savePhoto= async()=>{
-    
+  const savePhoto= async(e) =>{
+    e.preventDefault()
+    let imageURL;
+
+    try {
+       if(profileImage!==null && (profileImage.type==="image/jpeg" || profileImage.type==="image/jpg" || profileImage.type==="image/png")){
+        const image=new FormData()
+        image.append("file",profileImage);
+        image.append("cloud_name",cloud_name);
+        image.append("upload_preset",upload_preset);
+
+        //saving img to cloudinary
+        const response= await fetch("https://res.cloudinary.com/dhhnvmoz0/image/upload/prakriti/sample.jpg")
+       }
+      
+    } catch (error) {
+      
+    }
   }
 
   return (

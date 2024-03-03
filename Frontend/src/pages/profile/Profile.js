@@ -3,13 +3,15 @@ import "./Profile.scss";
 import PageMenu from '../../components/pageMenu/PageMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../../components/card/Card';
-import { getUser, updateUser } from '../../redux/features/auth/authSlice';
+import { getUser, updatePhoto, updateUser } from '../../redux/features/auth/authSlice';
 import Loader from '../../components/loader/Loader.js'
 import { AiOutlineCloudUpload } from "react-icons/ai";
+import { toast } from "react-toastify"
+import { shortenText } from '../../utils/index.js';
 
 const cloud_name=`${process.env.REACT_APP_CLOUD_NAME}`;
 const upload_preset=`${process.env.REACT_APP_UPLOAD_PRESET}`
-const URL="https://res.cloudinary.com/dhhnvmoz0/image/upload/prakriti/sample.jpg"
+const url="https://api.cloudinary.com/v1_1/nitika/image/upload"
 
 const Profile = () => {
 
@@ -46,7 +48,7 @@ const Profile = () => {
         phone:user?.phone||"",
         role:user?.role||"",
         photo:user?.photo||"",
-        address:user?.address||{
+        address: {
           address:user?.address.address || "",
           state:user?.address.state || "",
           country:user?.address.country|| "",
@@ -95,11 +97,19 @@ const Profile = () => {
         image.append("upload_preset",upload_preset);
 
         //saving img to cloudinary
-        const response= await fetch("https://res.cloudinary.com/dhhnvmoz0/image/upload/prakriti/sample.jpg")
+        const response= await fetch(url,{method:"post" , body :image})
+        const imgData=await response.json()
+        // console.log(imgData)
+        imageURL=imgData.url.toString()
        }
-      
+       //saving photo to the mongodb
+       const userData={
+        photo:profileImage? imageURL:profile.photo,
+       }
+       dispatch(updatePhoto(userData))
+       setImagePreview(null)
     } catch (error) {
-      
+      toast.error(error.message)
     }
   }
 
@@ -229,6 +239,13 @@ const Profile = () => {
       </section>
     </>
   );
+}
+
+export const UserName=()=>{
+  const {user} =useSelector((state)=>state.auth);
+  const username =user?.name || "...";
+  return <span style={{color:"#ff7722" }}>Hi, {shortenText(username,9)} |
+  </span>
 }
 
 export default Profile;

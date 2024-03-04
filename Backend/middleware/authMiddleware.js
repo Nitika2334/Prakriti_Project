@@ -31,7 +31,7 @@ export const protect=asyncHandler(async(req,res,next) =>{
 
 //admin only
 export const adminOnly= (req,res,next)=>{
-    if(req.user && req.user.le=="admin"){
+    if(req.res.user && req.res.user.role==="admin"){
         next();
     }
     else{

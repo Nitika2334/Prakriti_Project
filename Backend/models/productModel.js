@@ -39,7 +39,7 @@ const productSchema = mongoose.Schema({
     default:0,
     trim:true,
   },
-  egularPrice:{
+  regularPrice:{
     type:Number,
     // required:[true,"Please add a category"],
     trim:true,

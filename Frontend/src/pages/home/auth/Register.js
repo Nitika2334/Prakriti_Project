@@ -9,14 +9,13 @@ import {useDispatch, useSelector } from "react-redux"
 import { RESET_AUTH, register  } from "../../../redux/features/auth/authSlice"
 import Loader from "../../../components/loader/Loader"
 
-
-
 const initialState ={
   name:"",
   email: "",
   password: "",
   cPassword: "",
 };
+
 const Register = () => {
     const [formData,setFormData] = useState(initialState)
     const{name,email,password,cPassword} = formData;

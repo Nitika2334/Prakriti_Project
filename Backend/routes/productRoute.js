@@ -9,7 +9,7 @@ router.post("/",protect,adminOnly, createProduct);
 router.get("/",getProducts);
 router.get("/:id",getProduct)
 router.post("/:id",protect,adminOnly, deleteProduct);
-router.patch("/:id",protect,adminOnly, updateProductProduct);
+router.patch("/:id",protect,adminOnly, updateProduct);
 
 
 export default router;

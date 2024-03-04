@@ -1,17 +1,10 @@
-// const dotenv=require("dotenv").config();
-// const express=require("express");
-// const mongoose=require("mongoose");
-// const cors=require("cors");
-// const cookieParser=require("cookie-parser");
-// mongoose.set('strictQuery', false);
-// const userRoute=require("./routes/userRoute")
-
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import userRoute from "./routes/userRoute.js"
+import userRoute from "./routes/userRoute.js";
+import productRoute from "./routes/productRoute.js"
 import errorHandler from "./middleware/errorMiddleware.js";
 dotenv.config();
 mongoose.set('strictQuery', false);
@@ -46,6 +39,7 @@ app.use(
 
 //routes
 app.use("/api/users",userRoute);
+app.use("/api/products",productRoute);
 app.get("/",(req,res)=>{
     res.send("home page...");
 })

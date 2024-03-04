@@ -1,7 +1,3 @@
-// const express=require("express")
-// const router=express.Router();
-// const { registerUser } =require("../controllers/userController");
-
 import express from "express";
 import {getUser, loginUser, logoutUser, registerUser,getLoginStatus,updateUser,updatePhoto} from "../controllers/userController.js"
 import { protect } from "../middleware/authMiddleware.js";

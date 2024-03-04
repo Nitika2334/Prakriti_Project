@@ -28,3 +28,14 @@ export const protect=asyncHandler(async(req,res,next) =>{
         throw new Error("Not authorized,please login");
     }
 });
+
+//admin only
+export const adminOnly= (req,res,next)=>{
+    if(req.user && req.user.le=="admin"){
+        next();
+    }
+    else{
+        res.send(401);
+        throw new Error("Not authorozed as an admin.")
+    }
+}

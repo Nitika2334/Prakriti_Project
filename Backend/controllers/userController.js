@@ -14,7 +14,7 @@ const generateToken = (id) => {
 // Register user route
 export const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     // Validation
     if (!name || !email || !password) {
         res.status(400);
@@ -84,7 +84,7 @@ export const loginUser = async (req, res, next) => {
 
     // Check if user exists
     const user = await User.findOne({email});
-    console.log(user);
+    // console.log(user);
 
     // Generate token
     
@@ -124,7 +124,7 @@ export const logoutUser = asyncHandler(async (req, res) => {
 
 // Get user details route
 export const getUser = asyncHandler(async (req, res) => {
-    console.log(req.res);
+    // console.log(req.res);
     const user = await User.findById(req.res.user._id).select("-password");
     if (user) {
         res.status(200).json(user);

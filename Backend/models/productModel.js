@@ -1,72 +1,38 @@
 import mongoose from "mongoose";
 
-const productSchema = mongoose.Schema({
-  name:{
-    type:String,
-    required: [true,"Please add a name"],
-    trim:true,
+const productSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true
   },
-  //stock keeping unit
-  sku:{
-    type:Number,
-    required:true,
-    default:"sku",
-    trim:true,
+  description: {
+    type: String,
+    required: true
   },
-  category:{
-    type:String,
-    required:[true,"Please add a category"],
-    trim:true,
+  price: {
+    type: Number,
+    required: true,
+    min: 0
   },
-  brand:{
-    type:String,
-    required:[true,"Please add a category"],
-    trim:true,
+  category: {
+    type: String,
+    required: true
   },
-  color:{
-    type:String,
-    required:[true,"Please add a season/color"],
-    default:"As seen",
-    trim:true,
+  quantity: {
+    type: Number,
+    required: true,
+    min: 0
   },
-  quantity:{
-    type:String,
-    required:[true,"Please add a category"],
-    trim:true,
+  imageUrl: {
+    type: String,
+    required: true
   },
-  sold:{
-    type:Number,
-    default:0,
-    trim:true,
-  },
-  regularPrice:{
-    type:Number,
-    // required:[true,"Please add a category"],
-    trim:true,
-  },
-  price:{
-    type:Number,
-    required:[true,"Please add a price"],
-    trim:true,
-  },
-  description:{
-    type:String,
-    required:[true,"Please add a category"],
-    trim:true,
-  },
-  image:{
-    type:[String],
-  },
-  ratings:{
-    type:[Object],
-  },
-},
+},{
+  timestamps:true
+}
+);
 
-{timestamp:true,}
+const Product = mongoose.model('Product', productSchema);
 
-)
-
-
-const Product=mongoose.model("Product",productSchema);
-
-module.exports=Product;
+export default Product;

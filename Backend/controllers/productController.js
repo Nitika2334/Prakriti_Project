@@ -1,27 +1,27 @@
 import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
-// import Product from "../models/productModel.js"
+import Product from "../models/productModel.js"
 
 
 export const createProduct= asyncHandler( async(req,res)=>{
     // res.send("Correct")
     const {
-        name,sku,category,brand,quantity,price,description,image,egularPrice,color,
+        name,description,price,category,quantity,imageUrl
     }=req.body;
 
-    if(!name ||!category || !brand || !quantity ||!price || !description){
-        res.send(400);
+    if(!name ||!category || !quantity ||!price || !description){
+        res.status(400);
         throw new Error("Please fill an all fields")
     }
 
     const product=await Product.create({
-        name,sku,category,brand,quantity,price,description,image,egularPrice,color,
+        name,description,price,category,quantity,imageUrl
     })
     
     res.status(201).json(product)
 })
 
-//get product
+//get products
 export const getProducts=asyncHandler(async(req,res)=>{
     // res.send("Correct")
     const products=await Product.find().sort("-createdAt")
@@ -43,6 +43,7 @@ export const getProduct=asyncHandler(async(req,res)=>{
 //delete product
 export const deleteProduct=asyncHandler(async(req,res)=>{
     // res.send("Correct");
+    console.log(req.params.id);
     const product=await Product.findById(req.params.id);
     if(!product){
         res.send(400);
@@ -57,26 +58,44 @@ export const deleteProduct=asyncHandler(async(req,res)=>{
 export const updateProduct=asyncHandler(async(req,res)=>{
     //res.send("Correct");
     const {
-        name,category,brand,quantity,price,description,image,egularPrice,color,
+        name,description,price,category,quantity,imageUrl
     }=req.body;
 
-    const product=await Product.findById(req.params.id);
-    if(!product){
-        res.send(400);
-        throw new Error("Product not found.")
-    }
-    //update product
-    const updatedProduct=await Product.findByIdAndUpdate(
-        {_is:req.params.id},
-        {
-            name,category,brand,quantity,price,description,image,egularPrice,color,
-        },
-        {
-            new:true,
-            runVaidators:true,
+    try {
+        const product=await Product.findById(req.params.id);
+        if(product){
+            product.name=name || product.name;
+            product.description=description || product.description;
+            product.price=price || product.price;
+            product.category=category || product.category;
+            product.quantity=quantity || product.quantity;
+            product.imageUrl=imageUrl || product.imageUrl;
+            const updatedProduct=await product.save();
+            res.status(200).json(updatedProduct);
         }
-    )
-    res.status(200).json(updatedProduct);
+        else{
+            res.status(404);
+            throw new Error("Product not found");
+        }
+    } catch (error) {
+        next(error);
+    }
+    // if(!product){
+    //     res.status(400);
+    //     throw new Error("Product not found.")
+    // }
+    // //update product
+    // // const updatedProduct=await Product.findByIdAndUpdate(
+    // //     {_is:req.params.id},
+    // //     {
+    // //         name,description,price,category,quantity,imageUrl,
+    // //     },
+    // //     {
+    // //         new:true,
+    // //         runVaidators:true,
+    // //     }
+    // // )
+    // res.status(200).json(updatedProduct);
 });
 
 //Review Product

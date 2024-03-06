@@ -91,7 +91,7 @@ const Header = () => {
             </li>
 
             <li>
-              <NavLink to="/shop" className={activeLink}>
+              <NavLink to={"shop"} className={activeLink}>
                 Shop
               </NavLink>
             </li>

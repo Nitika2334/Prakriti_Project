@@ -175,7 +175,6 @@ const authSlice = createSlice({
         state.isLoggedIn=false;
         state.user = null;
         toast.success(action.payload);
-        console.log(action.payload);
       })
       .addCase(logout.rejected,(state,action )=>{
         state.isLoading= false;
@@ -194,7 +193,7 @@ const authSlice = createSlice({
         state.isLoading= false;
         state.isSuccess= true;
         state.isLoggedIn=action.payload;
-        console.log(action.payload);
+
         if(action.payload.message==="invalid signature"){
           state.isLoggedIn=false;
         }
@@ -216,7 +215,6 @@ const authSlice = createSlice({
         state.isSuccess= true;
         state.isLoggedIn=true;
         state.user=action.payload;
-        console.log(action.payload);
       })
       .addCase(getUser.rejected,(state,action )=>{
         state.isLoading= false;
@@ -236,7 +234,6 @@ const authSlice = createSlice({
         state.isLoggedIn=true;
         state.user=action.payload;
         toast.success("User updated")
-        console.log(action.payload);
       })
       .addCase(updateUser.rejected,(state,action )=>{
         state.isLoading= false;
@@ -256,7 +253,6 @@ const authSlice = createSlice({
         state.isLoggedIn=true;
         state.user=action.payload;
         toast.success("User photo updated")
-        console.log(action.payload);
       })
       .addCase(updatePhoto.rejected,(state,action )=>{
         state.isLoading= false;

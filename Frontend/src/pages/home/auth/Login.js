@@ -21,7 +21,7 @@ const Login = () => {
     const loginUser=(e)=>{
       e.preventDefault();
 
-      if(!email || !password) return toast.error("ALL feilds are required");
+      if(!email || !password ) return toast.error("ALL feilds are required");
       if(!validateEmail(email)) return toast.error("Please enter a valid email");
       if(!validateEmail) return toast.error("Please enter a valid email");
       

@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from "./Header.module.scss";
 import { Link, NavLink } from "react-router-dom";
 import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { FaTimes } from 'react-icons/fa';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import { RESET_AUTH, logout } from '../../redux/features/auth/authSlice';
+import { RESET_AUTH, logout, getUser } from '../../redux/features/auth/authSlice';
 import { ShowOnLogout,ShowOnLogin } from '../hiddenLink/hiddenLink';
 import { UserName } from '../../pages/profile/Profile';
+
 
 export const Logo = () => ( 
   <div className={styles.logo}>
@@ -22,11 +23,19 @@ export const Logo = () => (
 
 const activeLink = (isActive) => (isActive ? `${styles.active}` : "");
 
+
 const Header = () => {
+  const {user} = useSelector((state)=>state.auth);
   const [showMenu, setShowMenu] = useState(false);
   const [scrollPage,setScrollPage] = useState(false);
   const dispatch=useDispatch();
   const navigate=useNavigate();
+
+  useEffect(()=>{
+    if(!user){
+      dispatch(getUser())
+    }
+  },[dispatch,user])
 
   const fixNavbar = ()=>{ 
     if(window.scrollY >50){
@@ -90,7 +99,7 @@ const Header = () => {
           <div className={styles['header-right']}>
             <span className={styles.links}>
             <ShowOnLogin>
-              <NavLink to={"login"} className={activeLink}>
+              <NavLink to={"profile"} className={activeLink}>
                 <FaUserCircle size={18} color="#ff7722"/>
                 <UserName/>
               </NavLink>

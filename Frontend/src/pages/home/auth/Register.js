@@ -33,10 +33,11 @@ const Register = () => {
     const registerUser=async(e)=>{
       e.preventDefault();
 
-      if(!email || !password)return toast.error("ALL feilds are required");
+      if(!name || !email || !password)return toast.error("ALL feilds are required");
       if(!validateEmail(email)) return toast.error("Please enter a valid email");
       
       const userData = {
+        name,
         email,
         password
       }

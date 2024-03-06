@@ -3,7 +3,7 @@
 export const sliderData = [
   {
     image: "https://images.unsplash.com/photo-1694478712030-66281d7d3723?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGhlcmJzJTIwYW5kJTIwc2hlcmJzfGVufDB8fDB8fHww",
-    heading: "herbs and sherbs",
+    heading: "Herbs and Shurbs",
     desc: "Up to 30% off on all onsale proucts.",
   },
   {

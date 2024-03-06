@@ -53,7 +53,9 @@ const Home = () => {
       </section>
       <section>
         <div className="container">
-          <PageHeading heading={"Mobile phones"} btnText={"Shop Now"}/>
+          <PageHeading heading={"Accessories"} btnText={"Shop Now"}/>
+          <ProductCarousel products={productss}/>
+          <PageHeading heading={"Cacti"} btnText={"Shop Now"}/> 
           <ProductCarousel products={productss}/>
 
         </div>

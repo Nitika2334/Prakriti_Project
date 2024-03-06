@@ -8,7 +8,7 @@ const productSchema = mongoose.Schema({
   },
   //stock keeping unit
   sku:{
-    type:String,
+    type:Number,
     required:true,
     default:"sku",
     trim:true,

@@ -14,7 +14,7 @@ const generateToken = (id) => {
 // Register user route
 export const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
-
+    console.log(req.body);
     // Validation
     if (!name || !email || !password) {
         res.status(400);
@@ -75,27 +75,45 @@ export const registerUser = asyncHandler(async (req, res) => {
 // Login user route
 export const loginUser = async (req, res, next) => {
     const { email, password } = req.body;
-    try {
-        const validUser = await User.findOne({ email });
-        if (!validUser) return next(errorHandler(404, "User not found"));
-        const validPassword = bcryptjs.compareSync(password, validUser.password);
-        if (!validPassword) return next(errorHandler(401, "Invalid credentials"));
-        const token = jwt.sign({ id: validUser._id }, `${process.env.JWT_SECRET}`);
-        const rest = { ...validUser._doc };
-        delete rest.password;
-        res
-            .cookie('token', token, { httpOnly: true })
-            .status(200)
-            .json(rest);
-    } catch (error) {
-        next(error);
+    // Validation
+    if (!email || !password) {
+        res.status(400);
+        throw new Error("Please fill in all required fields");
+    }
+    
+
+    // Check if user exists
+    const user = await User.findOne({email});
+    console.log(user);
+
+    // Generate token
+    
+
+    if (user) {
+        const { _id, name, email, role } = user;
+        const token = generateToken(user._id);
+        res.cookie("token", token, {
+            httpOnly: true,
+            expires: new Date(Date.now() + 1000 * 86400),
+        });
+
+        // Send user data
+        res.status(201).json({
+            _id,
+            name,
+            email,
+            role,
+            token
+        });
+    } else {
+        res.status(400);
+        throw new Error("User doesn't exist...");
     }
 };
 
 // Logout user route
 export const logoutUser = asyncHandler(async (req, res) => {
     res.cookie("token", "", {
-        path: "/",
         httpOnly: true,
         expires: new Date(0),
         // secure:true,
@@ -106,6 +124,7 @@ export const logoutUser = asyncHandler(async (req, res) => {
 
 // Get user details route
 export const getUser = asyncHandler(async (req, res) => {
+    console.log(req.res);
     const user = await User.findById(req.res.user._id).select("-password");
     if (user) {
         res.status(200).json(user);

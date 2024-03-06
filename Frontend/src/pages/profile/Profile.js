@@ -1,6 +1,5 @@
 import React,{useEffect, useState} from 'react';
 import "./Profile.scss";
-import PageMenu from '../../components/pageMenu/PageMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../../components/card/Card';
 import { getUser, updatePhoto, updateUser } from '../../redux/features/auth/authSlice';
@@ -9,9 +8,10 @@ import { AiOutlineCloudUpload } from "react-icons/ai";
 import { toast } from "react-toastify"
 import { shortenText } from '../../utils/index.js';
 
-const cloud_name=`${process.env.REACT_APP_CLOUD_NAME}`;
+
 const upload_preset=`${process.env.REACT_APP_UPLOAD_PRESET}`
-const url="https://api.cloudinary.com/v1_1/nitika/image/upload"
+const cloud_name=`${process.env.REACT_APP_CLOUD_NAME}`
+const url='https://api.cloudinary.com/v1_1/dhhnvmoz0/image/upload';
 
 const Profile = () => {
 
@@ -24,10 +24,10 @@ const Profile = () => {
     role:user?.role||"",
     photo:user?.photo||"",
     address:user?.address||{
-      address:user?.address.address || "",
-      state:user?.address.state || "",
-      country:user?.address.country|| "",
-    },
+      address:user?.address?.address || "",
+      state:user?.address?.state || "",
+      country:user?.address?.country|| "",
+    }
   }
   const [profile,setProfile]=useState(initialState);
   const [profileImage,setProfileImage]=useState(null);
@@ -35,7 +35,7 @@ const Profile = () => {
   const dispatch=useDispatch();
 
   useEffect(()=>{
-    if(user==null){
+    if(!user){
       dispatch(getUser())
     }
   },[dispatch,user])
@@ -49,9 +49,9 @@ const Profile = () => {
         role:user?.role||"",
         photo:user?.photo||"",
         address: {
-          address:user?.address.address || "",
-          state:user?.address.state || "",
-          country:user?.address.country|| "",
+          address:user?.address?.address || "",
+          state:user?.address?.state || "",
+          country:user?.address?.country|| "",
         },
       })
     }
@@ -91,15 +91,19 @@ const Profile = () => {
 
     try {
        if(profileImage!==null && (profileImage.type==="image/jpeg" || profileImage.type==="image/jpg" || profileImage.type==="image/png")){
-        const image=new FormData()
+        const image=new FormData();
         image.append("file",profileImage);
-        image.append("cloud_name",cloud_name);
         image.append("upload_preset",upload_preset);
+        image.append("cloud_name",cloud_name);
+        console.log(image);
+        //console.log(upload_preset);
+
 
         //saving img to cloudinary
         const response= await fetch(url,{method:"post" , body :image})
+        console.log(response);
         const imgData=await response.json()
-        // console.log(imgData)
+        console.log(imgData);
         imageURL=imgData.url.toString()
        }
        //saving photo to the mongodb
@@ -118,9 +122,10 @@ const Profile = () => {
       <section>
         {isLoading && <Loader/>}
         <div className="container">
-          <PageMenu />
-          <h2>Profile</h2>
+          
+        <h2>Profile</h2>
           <div className="--flex-start profile">
+          
             <Card cardClass={"card"}>
               {!isLoading && (
                 <>

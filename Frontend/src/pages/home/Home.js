@@ -48,7 +48,6 @@ const Home = () => {
             Categories
             </h3>
             <ProductCategory/>
-          
         </div>
       </section>
       <section>

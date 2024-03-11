@@ -14,34 +14,33 @@ const initialState ={
   email: "",
   password: "",
   cPassword: "",
+  role:"customer",
 };
 
 const Register = () => {
     const [formData,setFormData] = useState(initialState)
-    const{name,email,password,cPassword} = formData;
+    const{name,email,password,cPassword,role} = formData;
     const {isLoading,isLoggedIn,isSuccess} = useSelector((state)=>state.auth)
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const  handleInputChange = (e)=>
     {
-      const{name,value}=e.target
-      setFormData({...formData,[name]:value })
-
+      setFormData({...formData,[e.target.name]:e.target.value });
     };
 
     const registerUser=async(e)=>{
       e.preventDefault();
-
-      if(!name || !email || !password)return toast.error("ALL feilds are required");
+      
+      if(!name || !email || !password || !role)return toast.error("ALL feilds are required");
       if(!validateEmail(email)) return toast.error("Please enter a valid email");
       
       const userData = {
         name,
         email,
-        password
+        password,
+        role
       }
-
       dispatch(register(userData));
     } 
 
@@ -92,6 +91,15 @@ const Register = () => {
           value={cPassword}
           onChange={handleInputChange}
           />
+        <label for="userType">Choose a Role:</label>
+        <select 
+          required
+          onChange={handleInputChange}
+          name="role"
+          value={role}>
+          <option value="customer">Customer</option>
+          <option value="admin">Admin</option>
+        </select>
       <button type = "submit" className='--btn --btn-primary --btn-block'>
         Register
       </button>

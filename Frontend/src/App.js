@@ -5,7 +5,8 @@ import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import Login from "./pages/home/auth/Login";
 import Register from "./pages/home/auth/Register";
-import Shop from "./pages/shop/Shop"
+import Shop from "./pages/shop/Shop";
+import AddProduct from "./pages/AddProduct/AddProduct";
 import axios from "axios";
 import { ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,6 +34,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile/>} />
+        <Route path="/add-product" element={<AddProduct/>}></Route>
       </Routes>
       <Footer/>
       

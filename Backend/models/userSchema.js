@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
@@ -28,7 +27,6 @@ const userSchema = new Schema(
     role: {
       type: String,
       required: [true],
-      default: "admin",
       enum: ["customer", "admin"],
     },
     photo: {
@@ -43,22 +41,16 @@ const userSchema = new Schema(
       type: Object,
       // address, state, country
     },
-    wishlist: [{ type: Schema.Types.ObjectId, ref: "Product" }],
-    balance: {
-      type: Number,
-      default: 0,
-    },
-    cartItems: {
-      type: [Object],
-    },
+    cartItems: [
+      {
+        type: Schema.Types.ObjectId,
+        ref:"Product",
+      }
+    ],
     isVerified: {
       type: Boolean,
       default: false,
-    },
-    stripeCustomerId: {
-      type: String,
-      // required: true,
-    },
+    }
   },
   {
     timestamps: true,

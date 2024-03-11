@@ -7,8 +7,9 @@ import { FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import { RESET_AUTH, logout, getUser } from '../../redux/features/auth/authSlice';
-import { ShowOnLogout,ShowOnLogin } from '../hiddenLink/hiddenLink';
+import { ShowOnLogout,ShowOnLogin,ShowAdminOnly,ShowCustomerOnly } from '../hiddenLink/hiddenLink';
 import { UserName } from '../../pages/profile/Profile';
+import Cookies from 'js-cookie'
 
 
 export const Logo = () => ( 
@@ -32,10 +33,10 @@ const Header = () => {
   const navigate=useNavigate();
 
   useEffect(()=>{
-    if(!user){
+    if(Cookies.get('token')){
       dispatch(getUser())
     }
-  },[dispatch,user])
+  },[])
 
   const fixNavbar = ()=>{ 
     if(window.scrollY >50){
@@ -104,20 +105,29 @@ const Header = () => {
                 <UserName/>
               </NavLink>
               </ShowOnLogin>
-            <ShowOnLogout>
-              <NavLink to={"login"} className={activeLink(true)}>
-                Login
-              </NavLink>
+              <ShowOnLogout>
+                <NavLink to={"login"} className={activeLink(true)}>
+                  Login
+                </NavLink>
               </ShowOnLogout>
               <ShowOnLogout>
-              <NavLink to={"register"} className={activeLink(true)}>
-                Register 
-              </NavLink>
+                <NavLink to={"register"} className={activeLink(true)}>
+                  Register 
+                </NavLink>
               </ShowOnLogout>
               <ShowOnLogin>
-              <NavLink to={"order-history"} className={activeLink(true)}>
-                My Order
-              </NavLink>
+                <ShowCustomerOnly>
+                  <NavLink to={"order-history"} className={activeLink(true)}>
+                    My Order
+                  </NavLink>
+                </ShowCustomerOnly>
+              </ShowOnLogin>
+              <ShowOnLogin>
+                <ShowAdminOnly>
+                  <NavLink to={"add-product"} className={activeLink(true)}>
+                    Add Product
+                  </NavLink>
+                </ShowAdminOnly>
               </ShowOnLogin>
               <ShowOnLogin>
               <Link to={"/"} onClick={logoutUser}>

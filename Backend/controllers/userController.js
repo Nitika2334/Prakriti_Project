@@ -13,10 +13,11 @@ const generateToken = (id) => {
 
 // Register user route
 export const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
+    console.log(req.body);
     // console.log(req.body);
     // Validation
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !role) {
         res.status(400);
         throw new Error("Please fill in all required fields");
     }
@@ -36,7 +37,8 @@ export const registerUser = asyncHandler(async (req, res) => {
     const user = new User({
         name,
         email,
-        password
+        password,
+        role
     });
 
     try {
@@ -51,11 +53,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     if (user) {
         const { _id, name, email, role } = user;
         res.cookie("token", token, {
-            path: "/",
-            httpOnly: true,
             expires: new Date(Date.now() + 1000 * 86400),
-            // secure:true,
-            // samesite:none,
         });
 
         // Send user data
@@ -93,7 +91,6 @@ export const loginUser = async (req, res, next) => {
         const { _id, name, email, role } = user;
         const token = generateToken(user._id);
         res.cookie("token", token, {
-            httpOnly: true,
             expires: new Date(Date.now() + 1000 * 86400),
         });
 
@@ -113,12 +110,7 @@ export const loginUser = async (req, res, next) => {
 
 // Logout user route
 export const logoutUser = asyncHandler(async (req, res) => {
-    res.cookie("token", "", {
-        httpOnly: true,
-        expires: new Date(0),
-        // secure:true,
-        // samesite:none,
-    });
+    res.clearCookie("token");
     return res.status(200).json({ message: "Successfully logged out" });
 });
 
@@ -134,16 +126,11 @@ export const getUser = asyncHandler(async (req, res) => {
     }
 });
 
-// Middleware to handle errors
-const errorHandler = (statusCode, message) => {
-    const error = new Error(message);
-    error.statusCode = statusCode;
-    return error;
-};
 
 // Update user details route
 export const updateUser = asyncHandler(async (req, res,next) => {
     const { name, phone, address } = req.body;
+    console.log(req.body);
     try {
         const user = await User.findById(req.res.user._id);
         if (user) {

@@ -6,16 +6,16 @@ import Product from "../models/productModel.js"
 export const createProduct= asyncHandler( async(req,res)=>{
     // res.send("Correct")
     const {
-        name,description,price,category,quantity,imageUrl
+        name,description,price,category,quantity,userRef,productPhoto
     }=req.body;
 
-    if(!name ||!category || !quantity ||!price || !description){
+    if(!name ||!category || !description || !productPhoto || !userRef){
         res.status(400);
         throw new Error("Please fill an all fields")
     }
 
     const product=await Product.create({
-        name,description,price,category,quantity,imageUrl
+        name,description,price,category,quantity,userRef,productPhoto
     })
     
     res.status(201).json(product)
@@ -58,7 +58,7 @@ export const deleteProduct=asyncHandler(async(req,res)=>{
 export const updateProduct=asyncHandler(async(req,res)=>{
     //res.send("Correct");
     const {
-        name,description,price,category,quantity,imageUrl
+        name,description,price,category,quantity,productPhoto
     }=req.body;
 
     try {
@@ -69,7 +69,7 @@ export const updateProduct=asyncHandler(async(req,res)=>{
             product.price=price || product.price;
             product.category=category || product.category;
             product.quantity=quantity || product.quantity;
-            product.imageUrl=imageUrl || product.imageUrl;
+            product.productPhoto=productPhoto || product.productPhoto;
             const updatedProduct=await product.save();
             res.status(200).json(updatedProduct);
         }
@@ -88,7 +88,7 @@ export const updateProduct=asyncHandler(async(req,res)=>{
     // // const updatedProduct=await Product.findByIdAndUpdate(
     // //     {_is:req.params.id},
     // //     {
-    // //         name,description,price,category,quantity,imageUrl,
+    // //         name,description,price,category,quantity,productPhoto,
     // //     },
     // //     {
     // //         new:true,

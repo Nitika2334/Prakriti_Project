@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+const { Schema, model } = mongoose;
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -24,7 +25,12 @@ const productSchema = new mongoose.Schema({
     required: true,
     min: 0
   },
-  imageUrl: {
+  userRef:{ 
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required:true,
+  },
+  productPhoto: {
     type: String,
     required: true
   },
@@ -33,6 +39,6 @@ const productSchema = new mongoose.Schema({
 }
 );
 
-const Product = mongoose.model('Product', productSchema);
+const Product = model('Product', productSchema);
 
 export default Product;

@@ -2,7 +2,7 @@ import React,{useEffect, useState} from 'react';
 import "./Profile.scss";
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../../components/card/Card';
-import { getUser, updatePhoto, updateUser } from '../../redux/features/auth/authSlice';
+import { updatePhoto, updateUser } from '../../redux/features/auth/authSlice';
 import Loader from '../../components/loader/Loader.js'
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { toast } from "react-toastify"
@@ -34,11 +34,6 @@ const Profile = () => {
   const [imagePreview, setImagePreview]=useState(null);
   const dispatch=useDispatch();
 
-  useEffect(()=>{
-    if(!user){
-      dispatch(getUser())
-    }
-  },[dispatch,user])
 
   useEffect(()=>{
     if(user){

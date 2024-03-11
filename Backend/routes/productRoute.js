@@ -5,7 +5,7 @@ const router=express.Router();
 
 
 
-router.post("/",protect,adminOnly, createProduct);
+router.post("/createProduct",protect,adminOnly, createProduct);
 router.get("/",getProducts);
 router.get("/:id",getProduct)
 

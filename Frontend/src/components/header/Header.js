@@ -130,12 +130,23 @@ const Header = () => {
                 </ShowAdminOnly>
               </ShowOnLogin>
               <ShowOnLogin>
+                <ShowAdminOnly>
+                  <NavLink to={"show-product"} className={activeLink(true)}>
+                    Product
+                  </NavLink>
+                </ShowAdminOnly>
+              </ShowOnLogin>
+              <ShowOnLogin>
               <Link to={"/"} onClick={logoutUser}>
                 Logout
               </Link>
               </ShowOnLogin>
             </span>
-            {cart}
+            <ShowOnLogin>
+              <ShowCustomerOnly>
+                {cart}
+              </ShowCustomerOnly>
+            </ShowOnLogin>
           </div>
         </nav>
         <div className={styles['menu-icon']}>

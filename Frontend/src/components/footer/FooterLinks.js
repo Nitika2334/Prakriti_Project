@@ -1,6 +1,5 @@
 import React from 'react'
 import { FaFacebookF, FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa'
-import logoImg from "../../assets/shopito_logo.png"
 import "./FooterStyles.scss"
 const FooterLinks = () => {
   return <>
@@ -18,9 +17,6 @@ const FooterLinks = () => {
   </section>
   <section className='footer-section'> 
   <div className='container footer'>
-    <div className="footer-logo">
-        <img src={logoImg} alt="logo"></img>
-    </div>
     <div className="container footer">
 
         <div className="footer-menu">

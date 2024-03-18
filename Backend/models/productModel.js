@@ -18,7 +18,8 @@ const productSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    required: true
+    required: [true],
+    enum: ["plant", "accessories"],
   },
   quantity: {
     type: Number,

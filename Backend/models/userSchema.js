@@ -35,13 +35,19 @@ const userSchema = new Schema(
     },
     phone: {
       type: String,
-      default: "+234",
+      default: "+91",
     },
     address: {
       type: Object,
       // address, state, country
     },
     cartItems: [
+      {
+        type: Schema.Types.ObjectId,
+        ref:"Product",
+      }
+    ],
+    listedItems: [
       {
         type: Schema.Types.ObjectId,
         ref:"Product",

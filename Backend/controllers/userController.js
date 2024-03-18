@@ -14,7 +14,6 @@ const generateToken = (id) => {
 // Register user route
 export const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password, role } = req.body;
-    console.log(req.body);
     // console.log(req.body);
     // Validation
     if (!name || !email || !password || !role) {
@@ -81,27 +80,20 @@ export const loginUser = async (req, res, next) => {
     
 
     // Check if user exists
-    const user = await User.findOne({email});
+    const user = await User.findOne({email}).select("-password");
     // console.log(user);
 
     // Generate token
     
 
     if (user) {
-        const { _id, name, email, role } = user;
         const token = generateToken(user._id);
         res.cookie("token", token, {
             expires: new Date(Date.now() + 1000 * 86400),
         });
 
         // Send user data
-        res.status(201).json({
-            _id,
-            name,
-            email,
-            role,
-            token
-        });
+        res.status(201).json(user);
     } else {
         res.status(400);
         throw new Error("User doesn't exist...");

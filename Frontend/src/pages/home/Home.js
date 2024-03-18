@@ -1,12 +1,11 @@
-import React from 'react';
+import React , {useState, useEffect} from 'react';
 import Slider from '../../components/slider/Slider';
-import HomeInfoBox from './HomeInfoBox';
 import './HomeStyles.scss';
 import { productData } from '../../components/corousel/data';
 import CarouselItem from "../../components/corousel/CarouselItem"
 import ProductCarousel from '../../components/corousel/Carousel';
-import ProductCategory from './ProductCategory';
 import FooterLinks from '../../components/footer/FooterLinks';
+import productService from '../../Service/productService';
 
 const PageHeading = ({ heading, btnText }) => {
   return (
@@ -21,11 +20,53 @@ const PageHeading = ({ heading, btnText }) => {
 };
 
 const Home = () => {
-  const productss = productData.map((item, index) => (
-    <div key={item.id}>
+  const [loading,setLoading]=useState(false);
+  const [plantProducts,setPlantProducts]=useState([]);
+  const [accessories,setAccessories]=useState([]);
+
+  useEffect(()=>{
+    setLoading(true);
+    productService.getPlantData()
+      .then(response => {
+        setPlantProducts(response);
+        setLoading(false);
+      })
+      .catch(error =>{
+        console.log(error);
+        setLoading(false);
+      })
+  },[])
+
+  useEffect(()=>{
+    setLoading(true);
+    productService.getAccessories()
+      .then(response => {
+        setAccessories(response);
+        setLoading(false);
+      })
+      .catch(error =>{
+        console.log(error);
+        setLoading(false);
+      })
+  },[]);
+
+
+  const plant = plantProducts.map((item) => (
+    <div key={item._id}>
       <CarouselItem
       name={item.name}
-      url={item.imageurl}
+      url={item.productPhoto}
+      price={item.price}
+      description={item.description}
+      />
+    </div>
+  ));
+
+  const itemsMap=accessories.map((item) => (
+    <div key={item._id}>
+      <CarouselItem
+      name={item.name}
+      url={item.productPhoto}
       price={item.price}
       description={item.description}
       />
@@ -35,27 +76,19 @@ const Home = () => {
   return (
     <>
       <Slider />
-      <section>
+      {/* <section>
         <div className="container">
-          <HomeInfoBox />
+          <HomeInfoBox/>
           <PageHeading heading={'Latest Products'} btnText={'Shop Now>>>'} />
           <ProductCarousel products={productss}/>
         </div>
-      </section>
-      <section className="--bt-grey">
-        <div className="container">
-          <h3>
-            Categories
-            </h3>
-            <ProductCategory/>
-        </div>
-      </section>
+      </section> */}
       <section>
         <div className="container">
-          <PageHeading heading={"Accessories"} btnText={"Shop Now"}/>
-          <ProductCarousel products={productss}/>
-          <PageHeading heading={"Cacti"} btnText={"Shop Now"}/> 
-          <ProductCarousel products={productss}/>
+          <PageHeading heading={"Plants"} btnText={"Shop Now"}/>
+          <ProductCarousel products={plant}/>
+          <PageHeading heading={"Accessories"} btnText={"Shop Now"}/> 
+          <ProductCarousel products={itemsMap}/>
 
         </div>
       </section>

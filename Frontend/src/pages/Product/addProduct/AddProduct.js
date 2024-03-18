@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Loader from '../../components/loader/Loader';
-import productService from './productService';
-import Card from '../../components/card/Card'
+import Loader from '../../../components/loader/Loader';
+import productService from '../../../Service/productService';
+import Card from '../../../components/card/Card'
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { toast } from "react-toastify"
 import { useSelector } from 'react-redux';
@@ -152,13 +152,14 @@ const AddProduct = () => {
               </p>
               <p>
                 <label>Category:</label>
-                <input
-                  type="text"
-                  name="category"
-                  value={product.category}
-                  onChange={handleInputChange}
+                <select 
                   required
-                />
+                  onChange={handleInputChange}
+                  name="category"
+                  value={product.category}>
+                  <option value="plant">Plant</option>
+                  <option value="accessories">Accessories</option>
+                </select>
               </p>
               <p>
                 <label>Quantity:</label>

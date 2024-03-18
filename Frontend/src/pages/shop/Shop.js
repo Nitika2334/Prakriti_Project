@@ -1,62 +1,50 @@
-import React from 'react';
-import './shopStyles.scss';
-import { productData } from '../../components/corousel/data';
-import CarouselItem from "../../components/corousel/CarouselItem"
-import ProductCarousel from '../../components/corousel/Carousel';
-import ProductCategory from '../home/ProductCategory';
-import Slider from '../../components/slider/Slider';
+import React, { useState, useEffect } from 'react';
+import productService from '../../Service/productService';
+import Loader from "../../components/loader/Loader"
+import "./Shop.scss"
 
-const PageHeading = ({ heading, btnText }) => {
+const ProductCard = ({ product }) => {
   return (
-    <>
-      <div className="--flex-between">
-        <h2 className="--fw-thin">{heading}</h2>
-        <button className="--btn">{btnText}</button>
+    <div className="product-card">
+      <img src={product.productPhoto} alt={product.name} />
+      <div className="product-details">
+        <h3>{product.name}</h3>
+        <p>{product.description}</p>
+        <p>Rs.{product.price}</p>
       </div>
-      <div className="--hr"></div>
-    </>
+    </div>
   );
 };
 
-const Shop=()=>{
-  const productss = productData.map((item, index) => (
-    <div key={item.id}>
-      <CarouselItem
-      name={item.name}
-      url={item.imageurl}
-      price={item.price}
-      description={item.description}
-      />
+const Shop = () => {
+  const [products, setProducts] = useState([]);
+  const [loading,setLoading]=useState(false);
+
+  useEffect(() => {
+    // Fetch products from backend
+    setLoading(true);
+    productService.getProducts()
+      .then(response => {
+        setLoading(false);
+        setProducts(response);
+      })
+      .catch(error => {
+        setLoading(false);
+        console.error('Error fetching products:', error);
+      });
+      console.log(products);
+  }, []); // Empty dependency array means this effect will run only once, similar to componentDidMount
+
+  return (
+    <div>
+      {loading && <Loader/>}
+      <div className="product-list">
+        {products.map((product) => (
+          <ProductCard key={product._id} product={product} />
+        ))}
+      </div>
     </div>
-  ));
+  );
+};
 
-  return(
-    <>
-    <Slider />
-      <section>
-        <div className="container">
-          <PageHeading heading={'Latest Products'} btnText={'Shop Now>>>'} />
-          <ProductCarousel products={productss}/>
-        </div>
-      </section>
-      <section className="--bt-grey">
-        <div className="container">
-          <h3>
-            Categories
-            </h3>
-            <ProductCategory/>
-        </div>
-      </section>
-      <section>
-        <div className="container">
-          <PageHeading heading={"Accessories"} btnText={"Shop Now"}/>
-          <ProductCarousel products={productss}/>
-          <PageHeading heading={"Cacti"} btnText={"Shop Now"}/> 
-          <ProductCarousel products={productss}/>
-
-        </div>
-      </section>
-    </>
-  )
-}
-export default Shop
+export default Shop;

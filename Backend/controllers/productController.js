@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
 import Product from "../models/productModel.js"
+import { User } from "../models/userSchema.js";
 
 
 export const createProduct= asyncHandler( async(req,res)=>{
@@ -17,27 +18,63 @@ export const createProduct= asyncHandler( async(req,res)=>{
     const product=await Product.create({
         name,description,price,category,quantity,userRef,productPhoto
     })
+
+    const admin=await User.findById(userRef);
+    if(admin){
+        admin.listedItems.push(product);
+        admin.save();
+    }
+    
     
     res.status(201).json(product)
 })
 
 //get products
 export const getProducts=asyncHandler(async(req,res)=>{
-    // res.send("Correct")
-    const products=await Product.find().sort("-createdAt")
-    res.status(200).json(products)
-
+    console.log(req.body);
+    if(req.body.category==="plant"){
+        const plantData=await Product.find({category:"plant"});
+        if(!plantData){
+            res.status(400);
+            throw new Error("plant data not found")
+        }
+        res.status(200).json(plantData);
+    }else if(req.body.category==="accessories"){
+        const accessories=await Product.find({category:"accessories"});
+        if(!accessories){
+            res.status(400);
+            throw new Error("accessories data not found")
+        }
+        res.status(200).json(accessories);
+    }else{
+        const products=await Product.find().sort("-createdAt");
+        if(!products){
+            res.status(400);
+            throw new Error("Products not found.")
+        }
+        res.status(200).json(products)
+    }
 })
 
 //get single product
 export const getProduct=asyncHandler(async(req,res)=>{
-    // res.send("Correct")
     const product=await Product.findById(req.params.id);
     if(!product){
-        res.send(400);
+        res.status(400);
         throw new Error("Product not found.")
     }
     res.status(200).json(product)
+})
+
+export const getPlants=asyncHandler(async(req,res)=>{
+    // res.send("Correct")
+    const products=await Product.find().sort("-createdAt");
+    if(!products){
+        res.status(400);
+        throw new Error("Products not found.")
+    }
+
+    res.status(200).json(products);
 })
 
 //delete product
@@ -190,6 +227,3 @@ export const updateReview=asyncHandler(async(req,res)=>{
     }
 });
 
-// module.exports={
-//     createProduct,
-// }

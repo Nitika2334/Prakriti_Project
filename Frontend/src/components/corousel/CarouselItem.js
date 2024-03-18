@@ -11,7 +11,7 @@ const CarouselItem = ({url,name,price, description}) => {
             <img className="product--image" src={url} alt="product" />
 
             <p className="price">
-                {`$${price}`}
+                {`Rs.${price}`}
             </p>
 
             <h4>

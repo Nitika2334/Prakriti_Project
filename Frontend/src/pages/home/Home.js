@@ -1,11 +1,12 @@
 import React , {useState, useEffect} from 'react';
 import Slider from '../../components/slider/Slider';
 import './HomeStyles.scss';
-import { productData } from '../../components/corousel/data';
 import CarouselItem from "../../components/corousel/CarouselItem"
 import ProductCarousel from '../../components/corousel/Carousel';
 import FooterLinks from '../../components/footer/FooterLinks';
 import productService from '../../Service/productService';
+import Loader from "../../components/loader/Loader"
+import {useSelector} from "react-redux";
 
 const PageHeading = ({ heading, btnText }) => {
   return (
@@ -20,40 +21,55 @@ const PageHeading = ({ heading, btnText }) => {
 };
 
 const Home = () => {
+  const {user,isLoading}=useSelector((state)=>state.auth);
   const [loading,setLoading]=useState(false);
   const [plantProducts,setPlantProducts]=useState([]);
-  const [accessories,setAccessories]=useState([]);
+  const [accessoryProducts,setAccessoryProducts]=useState([]);
+  const [adminProducts,setAdminProducts]=useState([]);
+  
 
   useEffect(()=>{
     setLoading(true);
     productService.getPlantData()
       .then(response => {
         setPlantProducts(response);
-        setLoading(false);
       })
       .catch(error =>{
         console.log(error);
-        setLoading(false);
       })
-  },[])
+    setLoading(false);
+  },[user])
 
   useEffect(()=>{
     setLoading(true);
     productService.getAccessories()
       .then(response => {
-        setAccessories(response);
-        setLoading(false);
+        setAccessoryProducts(response);
       })
       .catch(error =>{
         console.log(error);
-        setLoading(false);
       })
+    setLoading(false);
   },[]);
 
+  useEffect(()=>{
+    setLoading(true);
+    productService.getAdminProducts()
+      .then(response => {
+        console.log(response);
+        setAdminProducts(response);
+      })
+      .catch(error =>{
+        console.log(error);
+      })
+    setLoading(false);
+  },[]);
+  
 
   const plant = plantProducts.map((item) => (
     <div key={item._id}>
       <CarouselItem
+      id={item._id}
       name={item.name}
       url={item.productPhoto}
       price={item.price}
@@ -62,9 +78,10 @@ const Home = () => {
     </div>
   ));
 
-  const itemsMap=accessories.map((item) => (
+  const accessories=accessoryProducts.map((item) => (
     <div key={item._id}>
       <CarouselItem
+      id={item._id}
       name={item.name}
       url={item.productPhoto}
       price={item.price}
@@ -72,29 +89,50 @@ const Home = () => {
       />
     </div>
   ));
+
+  const products=adminProducts.map((item) => (
+    <div key={item._id}>
+      <CarouselItem
+      id={item._id}
+      name={item.name}
+      url={item.productPhoto}
+      price={item.price}
+      description={item.description}
+      />
+    </div>
+  ));
+
+  
 
   return (
     <>
-      <Slider />
-      {/* <section>
-        <div className="container">
-          <HomeInfoBox/>
-          <PageHeading heading={'Latest Products'} btnText={'Shop Now>>>'} />
-          <ProductCarousel products={productss}/>
-        </div>
-      </section> */}
-      <section>
-        <div className="container">
-          <PageHeading heading={"Plants"} btnText={"Shop Now"}/>
-          <ProductCarousel products={plant}/>
-          <PageHeading heading={"Accessories"} btnText={"Shop Now"}/> 
-          <ProductCarousel products={itemsMap}/>
-
-        </div>
-      </section>
-      <FooterLinks />
-
-    
+    <Slider/>
+    {loading && <Loader/>}
+    {isLoading ? <Loader/> 
+      :
+      <>
+        {user?.role==="admin" ? 
+        <section>
+          <div className="container">
+            <PageHeading heading={"Your Products"} btnText={"Add New"}/>
+            <ProductCarousel products={products || []}/>
+          </div>
+        </section>
+        :
+        <section>
+          <div className="container">
+            <PageHeading heading={"Plants"} btnText={"Shop Now"}/>
+            <ProductCarousel products={plant}/>
+            <PageHeading heading={"Accessories"} btnText={"Shop Now"}/> 
+            <ProductCarousel products={accessories}/>
+          </div>
+        </section>
+      
+      }
+      </>
+    }
+          
+      <FooterLinks/>    
     </>
   );
 };

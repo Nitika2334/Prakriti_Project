@@ -49,16 +49,12 @@ const Slider = () => {
               <>
                 <img src={image} alt="slide" />
                 <div className="content">
-                  <span className="span1"></span>
-                  <span className="span2"></span>
-                  <span className="span3"></span>
-                  <span className="span4"></span>
                   <h2>{heading}</h2>
                   <p>{desc}</p>
                   <hr />
                   <button
                     className="--btn --btn-primary"
-                    onClick={() => navigate('/shop')}
+                    onClick={()=>navigate("/shop")}
                   >
                     Shop Now
                   </button>

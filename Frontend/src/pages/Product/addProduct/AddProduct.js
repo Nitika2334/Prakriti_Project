@@ -14,7 +14,7 @@ const initialState={
   name:"",
   description:"",
   price:0,
-  category:"",
+  category:"plant",
   quantity:0,
   userRef:"",
   productPhoto:""
@@ -67,13 +67,21 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
     try {
+
       product.price=+product.price;
       product.quantity=+product.quantity;
       product.userRef=user._id;
+
       if(product.productPhoto){
-        const response=await productService.createProduct(product);
-        toast.success('Product added succesfully!');
+        productService.createProduct(product)
+          .then( () => {
+            toast.success('Product added succesfully!');
+          })
+          .catch( error => {
+            toast.error(error)
+          })
       }else{
         toast.error('Please upload the photo first...')
       }
@@ -96,7 +104,7 @@ const AddProduct = () => {
           <Card cardClass={"card"}>
           <div className="profile-photo">
             <div>
-              <img src={imagePreview===null ? productImage : imagePreview} alt="product photo"/>
+              <img src={imagePreview===null ? productImage : imagePreview} alt="product"/>
               {imagePreview!==null && (
                 <div className="--center-all">
 
@@ -107,7 +115,7 @@ const AddProduct = () => {
               )}
             </div>
           </div>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} encType="multipart/form-data">
               <p>
                 <label>
                   Change Photo:
@@ -115,7 +123,7 @@ const AddProduct = () => {
                 <input
                   type='file'
                   accept='image/*'
-                  name='image'
+                  name='productImage'
                   required
                   onChange={handleImageChange}
                 />

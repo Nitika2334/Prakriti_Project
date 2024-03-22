@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import productService from '../../Service/productService';
 import Loader from "../../components/loader/Loader"
+import { Link } from 'react-router-dom';
 import "./Shop.scss"
 
 const ProductCard = ({ product }) => {
   return (
-    <div className="product-card">
-      <img src={product.productPhoto} alt={product.name} />
-      <div className="product-details">
-        <h3>{product.name}</h3>
-        <p>{product.description}</p>
-        <p>Rs.{product.price}</p>
+    <Link to={`/product-details/${product._id}`}>
+      <div className="product-card">
+        <img src={product.productPhoto} alt={product.name} />
+        <div className="product-details">
+          <h3>{product.name}</h3>
+          <p>{product.description}</p>
+          <p>Rs.{product.price}</p>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
@@ -32,7 +35,6 @@ const Shop = () => {
         setLoading(false);
         console.error('Error fetching products:', error);
       });
-      console.log(products);
   }, []); // Empty dependency array means this effect will run only once, similar to componentDidMount
 
   return (

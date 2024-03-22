@@ -1,0 +1,109 @@
+// ProductDetails.scss
+
+$product-details-width: 90vw; // Adjust as needed
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Disable scrolling */
+}
+
+.product-details-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.product-details-box {
+  max-width: $product-details-width;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #ccc; /* Add border */
+  border-radius: 10px; /* Add border radius */
+  text-align: center; /* Center align text */
+}
+
+.product-details {
+  display: flex;
+  justify-content: center; /* Center align content horizontally */
+}
+
+.product-image-container {
+  flex: 1;
+  border-right: 1px solid #ccc; /* Add border */
+}
+
+.product-details-right {
+  flex: 1;
+  margin-left: 20px; /* Add margin to create space */
+  padding-left: 20px; /* Add padding */
+  font-size: calc(16px + 0.5vw); // Responsive font size
+}
+
+.product-image {
+  max-width: 100%;
+  height: auto;
+  width: 100%; // Ensure the image takes up the full width of its container
+  border-bottom: 1px solid #ccc; /* Add border */
+}
+
+.product-name {
+  font-size: calc(20px + 0.5vw); // Responsive font size
+  font-weight: bold;
+  color: #333;
+}
+
+.product-description {
+  font-size: calc(16px + 0.5vw); // Responsive font size
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.product-price {
+  font-size: calc(18px + 0.5vw); // Responsive font size
+  color: #008000;
+  margin-bottom: 20px;
+}
+
+.product-quantity-label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.product-quantity-input {
+  width: 50px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: calc(14px + 0.5vw); // Responsive font size
+}
+
+.product-stock {
+  font-size: calc(16px + 0.5vw); // Responsive font size
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.add-to-cart-button {
+  padding: 15px 30px; // Increased padding
+  font-size: calc(18px + 0.5vw); // Responsive font size
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-to-cart-button:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: #ff0000;
+  font-size: calc(16px + 0.5vw); // Responsive font size
+  margin-bottom: 20px;
+}

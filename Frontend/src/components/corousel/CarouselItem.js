@@ -3,10 +3,10 @@ import "./Carousel.scss"
 import { Link } from 'react-router-dom'
 import { shortenText } from '../../utils'
 
-const CarouselItem = ({url,name,price, description}) => {
+const CarouselItem = ({id,url,name,price, description}) => {
   return (
     <div className="carouselItem">
-        <Link to ="/product-details">
+        <Link to={`/product-details/${id}`}>
 
             <img className="product--image" src={url} alt="product" />
 

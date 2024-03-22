@@ -1,21 +1,19 @@
 // Import necessary modules
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
-import bcryptjs from "bcryptjs";
 import { User } from "../models/userSchema.js";
+import Product from "../models/productModel.js";
 
-// Function to generate JWT token
 const generateToken = (id) => {
     return jwt.sign({ id }, `${process.env.JWT_SECRET}`, {
         expiresIn: "1d"
     });
 }
 
-// Register user route
+
 export const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password, role } = req.body;
-    // console.log(req.body);
-    // Validation
+    
     if (!name || !email || !password || !role) {
         res.status(400);
         throw new Error("Please fill in all required fields");
@@ -25,14 +23,12 @@ export const registerUser = asyncHandler(async (req, res) => {
         throw new Error("Password must be at least 6 characters long");
     }
 
-    // Check if user exists
     const userExists = await User.findOne({ email });
     if (userExists) {
         res.status(400);
         throw new Error("Email has already been registered");
     }
 
-    // Create new user
     const user = new User({
         name,
         email,
@@ -46,7 +42,6 @@ export const registerUser = asyncHandler(async (req, res) => {
         console.log(error);
     }
 
-    // Generate token
     const token = generateToken(user._id);
 
     if (user) {
@@ -55,7 +50,6 @@ export const registerUser = asyncHandler(async (req, res) => {
             expires: new Date(Date.now() + 1000 * 86400),
         });
 
-        // Send user data
         res.status(201).json({
             _id,
             name,
@@ -69,30 +63,53 @@ export const registerUser = asyncHandler(async (req, res) => {
     }
 });
 
-// Login user route
-export const loginUser = async (req, res, next) => {
+
+export const addProductToCart = async (req,res) => {
+    try{
+        const user = await User.findById(req.res.user._id);
+        const product = await Product.findById(req.params.id);
+        
+        if(!user){
+            res.status(400);
+            throw new Error("User not found");
+        }
+        if(!product){
+            res.status(400);
+            throw new Error("Product not found");
+        }
+
+        user.cartItems.push(req.params.id,req.body.quantity);
+        const newQuantity=product.quantity - req.body.quantity;
+        product.quantity=newQuantity;
+        user.save();
+        product.save();
+
+        console.log(user);
+        console.log(product);
+
+        res.status(200);
+
+    }catch(error){
+        res.status(400)
+        throw new Error("Couldn't add product to the cart");
+    }
+}
+
+
+export const loginUser = async (req, res) => {
     const { email, password } = req.body;
-    // Validation
     if (!email || !password) {
         res.status(400);
         throw new Error("Please fill in all required fields");
     }
-    
 
-    // Check if user exists
     const user = await User.findOne({email}).select("-password");
-    // console.log(user);
-
-    // Generate token
     
-
     if (user) {
         const token = generateToken(user._id);
         res.cookie("token", token, {
             expires: new Date(Date.now() + 1000 * 86400),
         });
-
-        // Send user data
         res.status(201).json(user);
     } else {
         res.status(400);
@@ -100,15 +117,14 @@ export const loginUser = async (req, res, next) => {
     }
 };
 
-// Logout user route
+
 export const logoutUser = asyncHandler(async (req, res) => {
     res.clearCookie("token");
     return res.status(200).json({ message: "Successfully logged out" });
 });
 
-// Get user details route
+
 export const getUser = asyncHandler(async (req, res) => {
-    // console.log(req.res);
     const user = await User.findById(req.res.user._id).select("-password");
     if (user) {
         res.status(200).json(user);
@@ -119,7 +135,7 @@ export const getUser = asyncHandler(async (req, res) => {
 });
 
 
-// Update user details route
+
 export const updateUser = asyncHandler(async (req, res,next) => {
     const { name, phone, address } = req.body;
     console.log(req.body);
@@ -140,7 +156,7 @@ export const updateUser = asyncHandler(async (req, res,next) => {
     }
 });
 
-//get login status route
+
 export const getLoginStatus = asyncHandler(async (req, res) => {
     const token = req.cookies.token;
     if (!token) {
@@ -158,10 +174,7 @@ export const getLoginStatus = asyncHandler(async (req, res) => {
     }
 });
 
-// Update user photo route
 export const updatePhoto = asyncHandler(async (req, res) => {
-    // // Logic to update user's photo
-    // res.send("Photo updated successfully");
     const {photo}=req.body;
     const user=await User.findById(req.res.user._id);
     user.photo=photo

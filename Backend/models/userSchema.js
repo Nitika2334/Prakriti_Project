@@ -39,19 +39,18 @@ const userSchema = new Schema(
     },
     address: {
       type: Object,
-      // address, state, country
     },
     cartItems: [
       {
-        type: Schema.Types.ObjectId,
-        ref:"Product",
-      }
-    ],
-    listedItems: [
-      {
-        type: Schema.Types.ObjectId,
-        ref:"Product",
-      }
+        product:{
+          type: Schema.Types.ObjectId,
+          ref:"Product",
+        },
+        quantity:{
+          type:Number,
+          required:true
+        }
+      }   
     ],
     isVerified: {
       type: Boolean,
@@ -63,7 +62,7 @@ const userSchema = new Schema(
   }
 );
 
-// Encrypt password before saving to DB
+
 userSchema.pre("save", async function(next) {
   if (!this.isModified("password")) {
     return next();
@@ -77,6 +76,7 @@ userSchema.pre("save", async function(next) {
   } catch (error) {
     next(error);
   }
+  
 });
 
 export const User = model("user", userSchema);

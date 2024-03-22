@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ToastContainer} from "react-toastify";
+import { useDispatch } from "react-redux";
+import { getLoginStatus } from "./redux/features/auth/authSlice";
 import Home from "./pages/home/Home";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
@@ -8,12 +11,10 @@ import Register from "./pages/home/auth/Register";
 import Shop from "./pages/shop/Shop";
 import AddProduct from "./pages/Product/addProduct/AddProduct";
 import ShowProduct from "./pages/Product/showProduct/ShowProduct"
-import axios from "axios";
-import { ToastContainer} from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useDispatch } from "react-redux";
-import { getLoginStatus } from "./redux/features/auth/authSlice";
 import Profile from "./pages/profile/Profile";
+import ProductDetails from "./pages/Product/ProductDetails/ProductDetails"
+import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const App = () => {
@@ -36,11 +37,11 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile/>} />
         <Route path="/add-product" element={<AddProduct/>}/>
-        <Route path="/show-product" element={<ShowProduct/>}/>
-        
+        <Route path="/show-products" element={<ShowProduct/>}/>
+        <Route path="/product-details/:product_id" element={<ProductDetails/>}/>
       </Routes>
-      <Footer/>
-      
+
+      <Footer/>      
     </BrowserRouter>
   );
 };

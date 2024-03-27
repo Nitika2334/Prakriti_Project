@@ -35,7 +35,7 @@ export const adminOnly= (req,res,next)=>{
         next();
     }
     else{
-        res.send(401);
+        res.status(401);
         throw new Error("Not authorozed as an admin.")
     }
 }

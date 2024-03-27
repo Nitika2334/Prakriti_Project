@@ -38,10 +38,7 @@ const getAdminProducts = async () => {
   return response.data;
 }
 
-const addProductToCart = async (id,quantity) => {
-  const response = await axios.post(API_URL + `add-to-cart/${id}`,quantity)
-  return response.data;
-}
+
 
 
 const productService={
@@ -52,7 +49,6 @@ const productService={
     getPlantData,
     getAccessories,
     getAdminProducts,
-    addProductToCart
 }
 
 export default productService;

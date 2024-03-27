@@ -136,7 +136,7 @@ const Header = () => {
                   <ShowOnLogin>
                     <ShowAdminOnly>
                       <NavLink to={"show-products"} className={activeLink(true)}>
-                        Product
+                        Products
                       </NavLink>
                     </ShowAdminOnly>
                   </ShowOnLogin>

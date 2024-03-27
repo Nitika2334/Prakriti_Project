@@ -1,23 +1,28 @@
-$headerHeight: 100px;
+$headerHeight: 80px;
 
 body {
-  margin: 0; // Remove default margin
-  padding: 0; // Remove default padding
+  margin: 0;
+  padding: 0;
 }
 
 .product-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(calc(33.33% - 20px), 1fr)); // Three items per row with a 20px gap
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(250px, 1fr)
+  ); // Adjusted minimum width to 250px
   gap: 20px;
-  margin-top: $headerHeight; // Ensure products aren't overlapped by the header
-  padding: 20px; // Padding around the product list
+  margin-top: $headerHeight;
+  padding: 20px;
 }
 
 .product-card {
+  width: 400px; // Increased width for the product card
+  height: auto; // Allowing height to adjust according to content
   background-color: #ffffff;
   border: 1px solid #dddddd;
   border-radius: 8px;
-  padding: 20px; // Padding within the product card
+  padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 
@@ -27,46 +32,34 @@ body {
   }
 
   img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 10px;
+    width: 100%; // Make the image fill its container
+    height: 250px; // Fixed height for the image
+    object-fit: cover; // Maintain aspect ratio and crop if necessary
+    border-radius: 8px; // Apply border-radius to the image
   }
 
   .product-details {
+    overflow: hidden; // Ensure content doesn't overflow
     h3 {
       margin-bottom: 10px;
       font-size: 18px;
       color: #333333;
     }
 
-    p {
+    li {
       margin-bottom: 5px;
       font-size: 14px;
       color: #666666;
+      white-space: nowrap; // Prevent text from wrapping
+      overflow: hidden; // Hide overflowing text
+      text-overflow: ellipsis; // Display ellipsis (...) for overflow
     }
   }
 }
 
 // Responsive styles
 @media only screen and (max-width: 768px) {
-  .product-list {
-    grid-template-columns: repeat(auto-fit, minmax(calc(50% - 10px), 1fr)); // Two items per row with a 10px gap
-  }
-
   .product-card {
-    padding: 15px; // Adjust padding for smaller screens
-  }
-}
-
-@media only screen and (max-width: 480px) {
-  .product-list {
-    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr)); // One item per row, takes full width
-    margin-top: 0; // Adjust margin-top to avoid overlapping for smaller screens
-    padding: 10px; // Adjust padding for smaller screens
-  }
-
-  .product-card {
-    padding: 10px; // Adjust padding for smaller screens
+    height: auto; // Allowing height to adjust according to content
   }
 }

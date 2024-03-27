@@ -1,31 +1,31 @@
 import React, { useState } from 'react';
 import Loader from '../../../components/loader/Loader';
 import productService from '../../../Service/productService';
-import Card from '../../../components/card/Card'
-import { AiOutlineCloudUpload } from "react-icons/ai";
-import { toast } from "react-toastify"
+import Card from '../../../components/card/Card';
+import { AiOutlineCloudUpload } from 'react-icons/ai';
+import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import './AddProduct.scss';
 
-const upload_preset=`${process.env.REACT_APP_UPLOAD_PRESET}`
-const cloud_name=`${process.env.REACT_APP_CLOUD_NAME}`
-const url='https://api.cloudinary.com/v1_1/dhhnvmoz0/image/upload';
+const upload_preset = `${process.env.REACT_APP_UPLOAD_PRESET}`;
+const cloud_name = `${process.env.REACT_APP_CLOUD_NAME}`;
+const url = 'https://api.cloudinary.com/v1_1/dhhnvmoz0/image/upload';
 
-const initialState={
-  name:"",
-  description:"",
-  price:0,
-  category:"plant",
-  quantity:0,
-  userRef:"",
-  productPhoto:""
-}
-
+const initialState = {
+  name: '',
+  description: '',
+  price: 0,
+  category: 'plant',
+  quantity: 0,
+  userRef: '',
+  productPhoto: '',
+};
 
 const AddProduct = () => {
-  const {user}=useSelector((state)=>state.auth);
+  const { user } = useSelector((state) => state.auth);
   const [product, setProduct] = useState(initialState);
   const [productImage, setProductImage] = useState(null);
-  const [imagePreview, setImagePreview]=useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
@@ -39,57 +39,59 @@ const AddProduct = () => {
     setImagePreview(URL.createObjectURL(file));
   };
 
-  const savePhoto= async(e) =>{
-    e.preventDefault()
+  const savePhoto = async (e) => {
+    e.preventDefault();
     let imageURL;
     setIsLoading(true);
     try {
-      if(productImage!==null && (productImage.type==="image/jpeg" || productImage.type==="image/jpg" || productImage.type==="image/png")){
-      const data=new FormData();
-      data.append("file",productImage);
-      data.append("upload_preset",upload_preset);
-      data.append("cloud_name",cloud_name);
+      if (
+        productImage !== null &&
+        (productImage.type === 'image/jpeg' ||
+          productImage.type === 'image/jpg' ||
+          productImage.type === 'image/png')
+      ) {
+        const data = new FormData();
+        data.append('file', productImage);
+        data.append('upload_preset', upload_preset);
+        data.append('cloud_name', cloud_name);
 
-
-      //saving img to cloudinary
-      const response= await fetch(url,{method:"post" , body :data})
-      const imgData=await response.json();
-      imageURL=imgData.url.toString()
+        //saving img to cloudinary
+        const response = await fetch(url, { method: 'post', body: data });
+        const imgData = await response.json();
+        imageURL = imgData.url.toString();
       }
-      product.productPhoto=imageURL;
+      product.productPhoto = imageURL;
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      toast.error("Failed to upload product photo...")
+      toast.error('Failed to upload product photo...');
     }
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
+      product.price = +product.price;
+      product.quantity = +product.quantity;
+      product.userRef = user._id;
 
-      product.price=+product.price;
-      product.quantity=+product.quantity;
-      product.userRef=user._id;
-
-      if(product.productPhoto){
-        productService.createProduct(product)
-          .then( () => {
+      if (product.productPhoto) {
+        productService
+          .createProduct(product)
+          .then(() => {
             toast.success('Product added succesfully!');
           })
-          .catch( error => {
-            toast.error(error)
-          })
-      }else{
-        toast.error('Please upload the photo first...')
+          .catch((error) => {
+            toast.error(error);
+          });
+      } else {
+        toast.error('Please upload the photo first...');
       }
-      
-      
     } catch (error) {
       console.log(error);
-      toast.error("Failed to add product: ",error.message);
+      toast.error('Failed to add product: ', error.message);
     } finally {
       setIsLoading(false);
     }
@@ -101,29 +103,33 @@ const AddProduct = () => {
       <div className="container">
         <h2>Add Product</h2>
         <div className="--flex-start profile">
-          <Card cardClass={"card"}>
-          <div className="profile-photo">
-            <div>
-              <img src={imagePreview===null ? productImage : imagePreview} alt="product"/>
-              {imagePreview!==null && (
-                <div className="--center-all">
-
-                <button className="--btn --btn-secondary" onClick={savePhoto}>
-                  <AiOutlineCloudUpload size={18}/>Upload photo
-                </button>
-                </div>
-              )}
+          <Card cardClass={'card'}>
+            <div className="profile-photo">
+              <div>
+                <img
+                  src={imagePreview === null ? productImage : imagePreview}
+                  alt="product"
+                />
+                {imagePreview !== null && (
+                  <div className="--center-all">
+                    <button
+                      className="--btn --btn-secondary"
+                      onClick={savePhoto}
+                    >
+                      <AiOutlineCloudUpload size={18} />
+                      Upload photo
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
             <form onSubmit={handleSubmit} encType="multipart/form-data">
               <p>
-                <label>
-                  Change Photo:
-                </label>
+                <label>Change Photo:</label>
                 <input
-                  type='file'
-                  accept='image/*'
-                  name='productImage'
+                  type="file"
+                  accept="image/*"
+                  name="productImage"
                   required
                   onChange={handleImageChange}
                 />
@@ -152,7 +158,7 @@ const AddProduct = () => {
                 <input
                   type="number"
                   name="price"
-                  min={0}
+                  min={1}
                   value={product.price}
                   onChange={handleInputChange}
                   required
@@ -160,11 +166,12 @@ const AddProduct = () => {
               </p>
               <p>
                 <label>Category:</label>
-                <select 
+                <select
                   required
                   onChange={handleInputChange}
                   name="category"
-                  value={product.category}>
+                  value={product.category}
+                >
                   <option value="plant">Plant</option>
                   <option value="accessories">Accessories</option>
                 </select>
@@ -174,13 +181,13 @@ const AddProduct = () => {
                 <input
                   type="number"
                   name="quantity"
-                  min={0}
+                  min={1}
                   value={product.quantity}
                   onChange={handleInputChange}
                   required
                 />
               </p>
-              
+
               <button type="submit" className="--btn --btn-primary --btn-block">
                 Add Product
               </button>

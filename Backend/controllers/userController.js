@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { User } from "../models/userSchema.js";
 import Product from "../models/productModel.js";
 
+
 const generateToken = (id) => {
     return jwt.sign({ id }, `${process.env.JWT_SECRET}`, {
         expiresIn: "1d"
@@ -67,27 +68,28 @@ export const registerUser = asyncHandler(async (req, res) => {
 export const addProductToCart = async (req,res) => {
     try{
         const user = await User.findById(req.res.user._id);
-        const product = await Product.findById(req.params.id);
+        const currentProduct = await Product.findById(req.params.id);
         
         if(!user){
             res.status(400);
             throw new Error("User not found");
         }
-        if(!product){
+        if(!currentProduct){
             res.status(400);
             throw new Error("Product not found");
         }
 
-        user.cartItems.push(req.params.id,req.body.quantity);
-        const newQuantity=product.quantity - req.body.quantity;
-        product.quantity=newQuantity;
+        if(req.body.quantity > currentProduct.quantity){
+            res.status(400);
+            throw new Error("Not enough stock");
+        }
+
+        user.cartItems.push({product : req.params.id , quantity : req.body.quantity});
+        const newQuantity=currentProduct.quantity - req.body.quantity;
+        currentProduct.quantity=newQuantity;
         user.save();
-        product.save();
-
-        console.log(user);
-        console.log(product);
-
-        res.status(200);
+        currentProduct.save();
+        res.status(200).json({user,currentProduct});
 
     }catch(error){
         res.status(400)

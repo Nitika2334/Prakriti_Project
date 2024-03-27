@@ -47,6 +47,14 @@ const updatePhoto = async (userData) => {
   return response.data;
 };
 
+// add to product cart 
+
+const addProductToCart = async (id,quantity) => {
+  console.log(id+" "+quantity);
+  const response = await axios.post(API_URL + `add-to-cart/${id}` ,quantity)
+  return response.data;
+}
+
 const authService = {
   register,
   login,
@@ -54,7 +62,8 @@ const authService = {
   getLoginStatus,
   getUser,
   updateUser,
-  updatePhoto
+  updatePhoto,
+  addProductToCart
 };
 
 export default authService;

@@ -1,21 +1,22 @@
-// ProductDetails.scss
-
 $product-details-width: 90vw; // Adjust as needed
+$update-button-color: #007bff; // Blue color for update button
+$delete-button-color: #bc0f0f; // Red color for delete button
 
 body, html {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Disable scrolling */
+  overflow: auto; /* Enable scrolling */
 }
 
 .product-details-container {
   display: flex;
+  flex-wrap: wrap; /* Allow items to wrap to new line on smaller screens */
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; /* Align items to the top */
   width: 100%;
-  height: 100%;
+  padding: 20px; /* Add padding */
 }
 
 .product-details-box {
@@ -29,12 +30,14 @@ body, html {
 
 .product-details {
   display: flex;
+  flex-wrap: wrap; /* Allow items to wrap to new line on smaller screens */
   justify-content: center; /* Center align content horizontally */
+  width: 100%;
 }
 
 .product-image-container {
   flex: 1;
-  border-right: 1px solid #ccc; /* Add border */
+  margin-bottom: 20px; /* Add margin at the bottom for spacing */
 }
 
 .product-details-right {
@@ -75,7 +78,7 @@ body, html {
 }
 
 .product-quantity-input {
-  width: 50px;
+  width: 100px;
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -102,8 +105,70 @@ body, html {
   background-color: #0056b3;
 }
 
+
+// Updated styles for update and delete buttons
+.update-button {
+  margin-right: 10px; // Add margin to create space between buttons
+  padding: 15px 30px;
+  font-size: calc(18px + 0.5vw);
+  color: #fff;
+  background-color: $update-button-color; // Blue color for update button
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-button {
+  padding: 15px 30px;
+  font-size: calc(18px + 0.5vw);
+  color: #fff;
+  background-color: $delete-button-color; // Red color for delete button
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+// Hover styles for buttons
+.update-button:hover {
+  background-color: darken($update-button-color, 10%); // Darken blue color on hover
+}
+
+.delete-button:hover {
+  background-color: darken($delete-button-color, 10%); // Darken red color on hover
+}
+
 .error-message {
   color: #ff0000;
   font-size: calc(16px + 0.5vw); // Responsive font size
   margin-bottom: 20px;
+}
+
+// Media queries for responsiveness
+@media screen and (max-width: 768px) {
+  .product-details-container {
+    padding: 10px; /* Adjust padding for smaller screens */
+  }
+
+  .product-details-box {
+    max-width: 100%; /* Adjust maximum width for smaller screens */
+  }
+
+  .product-details-right {
+    flex: none; /* Disable flex for smaller screens */
+    margin-left: 0; /* Remove margin */
+    padding-left: 0; /* Remove padding */
+    text-align: center; /* Center align text */
+    width: 100%; /* Set width to full for smaller screens */
+    margin-top: 20px; /* Add margin at the top for spacing */
+  }
+
+  .product-image-container {
+    flex: none; /* Disable flex for smaller screens */
+    margin-bottom: 0; /* Remove margin */
+    width: 100%; /* Set width to full for smaller screens */
+  }
+
+  .product-image {
+    margin-bottom: 20px; /* Add margin at the bottom for spacing */
+  }
 }

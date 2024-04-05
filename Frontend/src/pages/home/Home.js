@@ -7,13 +7,15 @@ import FooterLinks from '../../components/footer/FooterLinks';
 import productService from '../../Service/productService';
 import Loader from "../../components/loader/Loader"
 import {useSelector} from "react-redux";
+import { useNavigate } from 'react-router-dom';
 
 const PageHeading = ({ heading, btnText }) => {
+  const navigate = useNavigate();
   return (
     <>
       <div className="--flex-between">
         <h2 className="--fw-thin">{heading}</h2>
-        <button className="--btn">{btnText}</button>
+        <button onClick={() => navigate('/shop')} className="--btn">{btnText}</button>
       </div>
       <div className="--hr"></div>
     </>
@@ -71,6 +73,7 @@ const Home = () => {
       <CarouselItem
       id={item._id}
       name={item.name}
+      stock={item.quantity}
       url={item.productPhoto}
       price={item.price}
       description={item.description}
@@ -83,6 +86,7 @@ const Home = () => {
       <CarouselItem
       id={item._id}
       name={item.name}
+      stock={item.quantity}
       url={item.productPhoto}
       price={item.price}
       description={item.description}
@@ -95,6 +99,7 @@ const Home = () => {
       <CarouselItem
       id={item._id}
       name={item.name}
+      stock={item.quantity}
       url={item.productPhoto}
       price={item.price}
       description={item.description}

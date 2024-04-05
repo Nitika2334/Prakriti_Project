@@ -55,6 +55,12 @@ const addProductToCart = async (id,quantity) => {
   return response.data;
 }
 
+const removeProductFromCart = async (id) => {
+  const response = await axios.patch(API_URL + "/remove-cart-product",id)
+  return response.data;
+}
+
+
 const authService = {
   register,
   login,
@@ -63,7 +69,8 @@ const authService = {
   getUser,
   updateUser,
   updatePhoto,
-  addProductToCart
+  addProductToCart,
+  removeProductFromCart
 };
 
 export default authService;

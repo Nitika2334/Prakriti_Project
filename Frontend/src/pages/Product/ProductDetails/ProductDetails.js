@@ -7,6 +7,9 @@ import authService from '../../../redux/features/auth/authService';
 import { getUser } from '../../../redux/features/auth/authSlice';
 import './ProductDetails.scss'; // Import the SCSS file
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+
+
 
 function ProductDetails() {
   const { user, isLoading } = useSelector((state) => state.auth);
@@ -16,13 +19,14 @@ function ProductDetails() {
   const { product_id } = useParams();
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate(); 
+
+  console.log(user);
 
   useEffect(() => {
     setLoading(true);
-    productService
-      .getProduct(product_id)
+    productService.getProduct(product_id)
       .then((response) => {
-        console.log(response);
         setCurrentProduct(response);
       })
       .catch((error) => {
@@ -35,7 +39,6 @@ function ProductDetails() {
   }, [product_id, user]);
 
   const handleAddToCart = () => {
-    console.log(quantity);
     if (currentProduct.quantity < quantity) {
       toast.error('Not enough stock left');
       return;
@@ -44,11 +47,16 @@ function ProductDetails() {
       toast.error('Please put a valid quantity...');
       return;
     }
+    if(!user){
+      navigate('/login');
+    }
+    
     setLoading(true);
     authService
       .addProductToCart(product_id, { quantity })
-      .then(() => {
+      .then((response) => {
         dispatch(getUser());
+        toast.success("Product has been added to the cart");
       })
       .catch((error) => {
         console.log(error);
@@ -58,6 +66,19 @@ function ProductDetails() {
       });
   };
 
+  const handleDeleteProduct = () => {
+    setLoading(true);
+    productService.deleteProduct(currentProduct._id)
+      .then( () => {
+        toast.success("Product has been deleted successfully");
+        navigate('/show-products');
+      })
+      .catch( (error) => {
+        console.log(error);
+      })
+    setLoading(false);
+  }
+
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value);
     setQuantity(value);
@@ -65,9 +86,7 @@ function ProductDetails() {
 
   return (
     <div className="product-details-container">
-      {loading && <Loader />}
-      {isLoading && <Loader />}
-      {/* {isLoading && <Loader/>} */}
+      { (loading || isLoading) && <Loader />}
       {error && <p className="error-message">{error}</p>}
       {currentProduct && (
         <>
@@ -87,37 +106,40 @@ function ProductDetails() {
               <p className="product-price">Rs.{currentProduct.price}</p>
               <p className="product-stock">Stock : {currentProduct.quantity}</p>
 
-              {user?.role === 'customer' ? (
-                currentProduct.quantity >= 1 ? (
-                  <>
-                    <label className="product-quantity-label">
-                      Quantity :
-                      <input
-                        type="number"
-                        min={1}
-                        max={currentProduct.quantity}
-                        value={quantity}
-                        onChange={handleQuantityChange}
-                        className="product-quantity-input"
-                      />
-                    </label>
-                    <button
-                      onClick={handleAddToCart}
-                      disabled={loading}
-                      className="add-to-cart-button"
-                    >
-                      Add to Cart
-                    </button>
-                  </>
-                ) : (
-                  <p className="error-message">Not in stock</p>
+              {user?.role === 'admin' ? 
+                (
+                  <div className="Buttons">
+                    <button onClick={ () => navigate(`/update-product/${currentProduct._id}`)} className="update-button">Update</button>
+                    <button onClick={handleDeleteProduct} className="delete-button">Delete</button>
+                  </div>
                 )
-              ) : (
-                <div className="Buttons">
-                  <button className="update-button">Update</button>
-                  <button className="delete-button">Delete</button>
-                </div>
-              )}
+                :
+                currentProduct.quantity >=1 ?
+                  (
+                    <>
+                      <label className="product-quantity-label">
+                        Quantity :
+                        <input
+                          type="number"
+                          min={1}
+                          max={currentProduct.quantity}
+                          value={quantity}
+                          onChange={handleQuantityChange}
+                          className="product-quantity-input"
+                        />
+                      </label>
+                      <button
+                        onClick={handleAddToCart}
+                        disabled={loading}
+                        className="add-to-cart-button"
+                      >
+                        Add to Cart
+                      </button>
+                    </>
+                  ) : (
+                    <p className="error-message">Not in stock</p>
+                  )
+              }
             </div>
           </div>
         </>
@@ -127,3 +149,7 @@ function ProductDetails() {
 }
 
 export default ProductDetails;
+
+
+
+

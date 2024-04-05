@@ -65,46 +65,13 @@ export const registerUser = asyncHandler(async (req, res) => {
 });
 
 
-export const addProductToCart = async (req,res) => {
-    try{
-        const user = await User.findById(req.res.user._id);
-        const currentProduct = await Product.findById(req.params.id);
-        
-        if(!user){
-            res.status(400);
-            throw new Error("User not found");
-        }
-        if(!currentProduct){
-            res.status(400);
-            throw new Error("Product not found");
-        }
-
-        if(req.body.quantity > currentProduct.quantity){
-            res.status(400);
-            throw new Error("Not enough stock");
-        }
-
-        user.cartItems.push({product : req.params.id , quantity : req.body.quantity});
-        const newQuantity=currentProduct.quantity - req.body.quantity;
-        currentProduct.quantity=newQuantity;
-        user.save();
-        currentProduct.save();
-        res.status(200).json({user,currentProduct});
-
-    }catch(error){
-        res.status(400)
-        throw new Error("Couldn't add product to the cart");
-    }
-}
-
-
 export const loginUser = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
         res.status(400);
         throw new Error("Please fill in all required fields");
     }
-
+    
     const user = await User.findOne({email}).select("-password");
     
     if (user) {
@@ -133,6 +100,66 @@ export const getUser = asyncHandler(async (req, res) => {
     } else {
         res.status(400);
         throw new Error("User not found");
+    }
+});
+
+export const addProductToCart = async (req,res) => {
+    try{
+        const user = await User.findById(req.res.user._id);
+        const currentProduct = await Product.findById(req.params.id);
+        
+        if(!user){
+            res.status(400);
+            throw new Error("User not found");
+        }
+        if(!currentProduct){
+            res.status(400);
+            throw new Error("Product not found");
+        }
+
+        if(req.body.quantity > currentProduct.quantity){
+            res.status(400);
+            throw new Error("Not enough stock");
+        }
+
+        let flag=true;
+        user.cartItems.forEach( (item) => {
+            if( item.product_id.equals(currentProduct._id) ){
+                currentProduct.quantity -= req.body.quantity;
+                item.quantity+=req.body.quantity;
+                user.save();
+                currentProduct.save();
+                flag=false;
+                res.status(200).json(currentProduct);
+                return;
+            }
+        });
+
+        if(flag){
+            user.cartItems.push( {product_id : req.params.id , quantity : req.body.quantity} );
+            currentProduct.quantity -= req.body.quantity;
+            user.save();
+            currentProduct.save();
+            res.status(200).json(currentProduct);
+        }
+
+    }catch(error){
+        res.status(400)
+        throw new Error("Couldn't add product to the cart");
+    }
+}
+
+export const removeProductFromCart = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.res.user._id).select("-password");
+    console.log(req.body.id);
+    try{
+        const newCartItems = user.cartItems.filter( (item) => item.product_id.toString() !== req.body.id);
+        user.cartItems = newCartItems;
+        user.save();
+        res.status(200).json(newCartItems);
+    }catch(error){
+        res.status(400)
+        throw new Error("Couldn't remove the item from the cart");
     }
 });
 

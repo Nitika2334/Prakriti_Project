@@ -38,8 +38,20 @@ const getAdminProducts = async () => {
   return response.data;
 }
 
+const getCartProducts = async () => {
+  const response = await axios.get(API_URL + "get/cart-products");
+  return response.data;
+}
 
+const deleteProduct = async (id) => {
+  const response = await axios.delete(API_URL + `/delete-product/${id}`);
+  return response.data;
+}
 
+const updateProduct = async (id, updatedProduct) => {
+  const response = await axios.patch(API_URL + `/update-product/${id}`, updatedProduct);
+  return response.data;
+}
 
 const productService={
     createProduct,
@@ -49,6 +61,9 @@ const productService={
     getPlantData,
     getAccessories,
     getAdminProducts,
+    getCartProducts,
+    deleteProduct,
+    updateProduct
 }
 
 export default productService;

@@ -28,7 +28,7 @@ const activeLink = (isActive) => (isActive ? `${styles.active}` : "");
 
 
 const Header = () => {
-  const {isLoading} = useSelector((state)=>state.auth);
+  const {user, isLoading} = useSelector((state)=>state.auth);
   const [showMenu, setShowMenu] = useState(false);
   const [scrollPage,setScrollPage] = useState(false);
   const dispatch=useDispatch();
@@ -70,7 +70,7 @@ const Header = () => {
       <Link to="/cart">
         Cart
         <FaShoppingCart size={20} />
-        <p>0</p>
+        <p>{user?.cartItems.length}</p>
       </Link>
     </span>
   );
@@ -96,9 +96,13 @@ const Header = () => {
                 </li>
 
                 <li>
-                  <NavLink to={"shop"} className={activeLink}>
-                    Shop
-                  </NavLink>
+                  {user?.role === 'admin' ? 
+                    "" 
+                    :
+                    <NavLink to={"shop"} className={activeLink}>
+                    shop
+                    </NavLink>
+                  }
                 </li>
               </ul>
               <div className={styles['header-right']}>

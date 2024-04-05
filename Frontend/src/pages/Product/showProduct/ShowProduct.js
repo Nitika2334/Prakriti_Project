@@ -45,9 +45,13 @@ function ShowProduct() {
     <div>
       {loading && <Loader />}
       <div className="product-list">
-        {products.map((product) => (
-          <ProductCard key={product._id} product={product} />
-        ))}
+        {products?.length === 0 ? 
+          <p>You have no products enlisted </p>
+          : 
+          products.map((product) => (
+            <ProductCard key={product._id} product={product} />
+          ))
+        }
       </div>
     </div>
   );

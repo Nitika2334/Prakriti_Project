@@ -1,4 +1,6 @@
 $headerHeight: 80px;
+$productCardWidth: calc((100% - 40px - 40px - 20px*2) / 3); // Calculate the width of each product card
+$minProductCardWidth: 300px; // Minimum width for each product card
 
 body {
   margin: 0;
@@ -7,17 +9,15 @@ body {
 
 .product-list {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(250px, 1fr)
-  ); // Adjusted minimum width to 250px
+  grid-template-columns: repeat(auto-fit, minmax(#{$productCardWidth}, #{$minProductCardWidth})); // Adjusted grid template columns
   gap: 20px;
   margin-top: $headerHeight;
   padding: 20px;
 }
 
 .product-card {
-  width: 400px; // Increased width for the product card
+  width: $productCardWidth; // Set the width of each product card
+  min-width: $minProductCardWidth; // Set the minimum width of each product card
   height: auto; // Allowing height to adjust according to content
   background-color: #ffffff;
   border: 1px solid #dddddd;

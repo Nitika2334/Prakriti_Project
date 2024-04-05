@@ -13,6 +13,8 @@ import AddProduct from "./pages/Product/addProduct/AddProduct";
 import ShowProduct from "./pages/Product/showProduct/ShowProduct"
 import Profile from "./pages/profile/Profile";
 import ProductDetails from "./pages/Product/ProductDetails/ProductDetails"
+import UpdateProduct from "./pages/Product/updateProduct/UpdateProduct"
+import Cart from "./pages/cart/Cart"
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -39,6 +41,8 @@ const App = () => {
         <Route path="/add-product" element={<AddProduct/>}/>
         <Route path="/show-products" element={<ShowProduct/>}/>
         <Route path="/product-details/:product_id" element={<ProductDetails/>}/>
+        <Route path="/update-product/:product_id" element={<UpdateProduct/>}/>
+        <Route path="/cart" element={<Cart/>}/>
       </Routes>
 
       <Footer/>      

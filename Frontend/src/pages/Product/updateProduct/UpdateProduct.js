@@ -1,36 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Loader from '../../../components/loader/Loader';
 import productService from '../../../Service/productService';
 import Card from '../../../components/card/Card';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import './AddProduct.scss';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getUser } from '../../../redux/features/auth/authSlice';
+import './UpdateProduct.scss';
+
 
 const upload_preset = `${process.env.REACT_APP_UPLOAD_PRESET}`;
 const cloud_name = `${process.env.REACT_APP_CLOUD_NAME}`;
 const url = 'https://api.cloudinary.com/v1_1/dhhnvmoz0/image/upload';
 
-const initialState = {
-  name: '',
-  description: '',
-  price: 0,
-  category: 'plant',
-  quantity: 0,
-  userRef: '',
-  productPhoto: '',
-};
+const UpdateProduct = () => {
+  const initialState = {
+    name: "",
+    description: "",
+    price: "",
+    productPhoto: "",
+    category: "",
+    quantity: 0,
+  };
 
-const AddProduct = () => {
-  const { user, isLoading } = useSelector((state) => state.auth);
-  const [product, setProduct] = useState(initialState);
+  const { isLoading } = useSelector((state) => state.auth);
+  const [product, setProduct] = useState(initialState); 
   const [productImage, setProductImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [samePhoto, setSamePhoto] = useState(false);
-  const [photoUpload, setPhotoUpload] = useState(false);
-  const navigate = useNavigate(); 
+  const [samePhoto, setSamePhoto] = useState(true);
+  const { product_id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setLoading(true);
+    productService.getProduct(product_id)
+      .then((response) => {
+        setProduct(response);
+        setImagePreview(response.productPhoto); // Set image preview to initial product photo
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error('Failed to fetch product data...');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [product_id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -39,15 +57,13 @@ const AddProduct = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setProductImage(file);
     setSamePhoto(false);
-    setPhotoUpload(false);
+    setProductImage(file);
     setImagePreview(URL.createObjectURL(file));
   };
 
   const savePhoto = async (e) => {
     e.preventDefault();
-    let imageURL;
     setLoading(true);
     try {
       if (
@@ -61,47 +77,37 @@ const AddProduct = () => {
         data.append('upload_preset', upload_preset);
         data.append('cloud_name', cloud_name);
 
-        //saving img to cloudinary
+        // Save image to cloudinary
         const response = await fetch(url, { method: 'post', body: data });
         const imgData = await response.json();
-        imageURL = imgData.url.toString();
-      }
-      product.productPhoto = imageURL;
-      setLoading(false);
-      setSamePhoto(true);
-      setPhotoUpload(true);
-      toast.success("product image uploaded successfully");
-    } catch (error) {
-      setLoading(false);
-      toast.error('Failed to upload product photo...');
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      product.price = +product.price;
-      product.quantity = +product.quantity;
-      product.userRef = user._id;
-
-      if (photoUpload) {
-        productService.createProduct(product)
-          .then( (response) => {
-            toast.success('Product added succesfully!');
-            const id = response._id;
-            navigate(`/product-details/${id}`)
-          })
-          .catch((error) => {
-            toast.error(error);
-          });
-      } else {
-        toast.error('Please upload the photo first...');
+        setProduct({ ...product, productPhoto: imgData.url }); // Update product photo URL
+        setSamePhoto(true);
+        toast.success("Photo updated succesfully");
       }
     } catch (error) {
       console.log(error);
-      toast.error('Failed to add product: ', error.message);
+      toast.error('Failed to upload product photo...');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit =  (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      productService.updateProduct(product_id , product)
+        .then( () => {
+          dispatch(getUser());
+          navigate(`/product-details/${product_id}`)
+          toast.success('Product updated successfully!');
+        })
+        .catch( error => {
+          toast.error(error);
+        })
+    } catch (error) {
+      console.log(error);
+      toast.error('Failed to update product...');
     } finally {
       setLoading(false);
     }
@@ -109,18 +115,18 @@ const AddProduct = () => {
 
   return (
     <section>
-      { (isLoading || loading) && <Loader />}
+      {(isLoading || loading) && <Loader />}
       <div className="container">
-        <h2>Add Product</h2>
+        <h2>Update Product</h2>
         <div className="--flex-start profile">
-          <Card cardClass={'card'}>
+        <Card cardClass={'card'}>
             <div className="profile-photo">
               <div>
                 <img
                   src={imagePreview === null ? productImage : imagePreview}
                   alt="product"
                 />
-                {imagePreview !== null && !samePhoto && (
+                {imagePreview !== null  && !samePhoto && (
                   <div className="--center-all">
                     <button
                       className="--btn --btn-secondary"
@@ -140,7 +146,6 @@ const AddProduct = () => {
                   type="file"
                   accept="image/*"
                   name="productImage"
-                  required
                   onChange={handleImageChange}
                 />
               </p>
@@ -151,7 +156,7 @@ const AddProduct = () => {
                   name="name"
                   value={product.name}
                   onChange={handleInputChange}
-                  required
+                  disabled // Disable the input field
                 />
               </p>
               <p>
@@ -160,7 +165,6 @@ const AddProduct = () => {
                   name="description"
                   value={product.description}
                   onChange={handleInputChange}
-                  required
                 />
               </p>
               <p>
@@ -171,20 +175,17 @@ const AddProduct = () => {
                   min={1}
                   value={product.price}
                   onChange={handleInputChange}
-                  required
                 />
               </p>
               <p>
                 <label>Category:</label>
-                <select
-                  required
-                  onChange={handleInputChange}
+                <input
+                  type="text"
                   name="category"
                   value={product.category}
-                >
-                  <option value="plant">Plant</option>
-                  <option value="accessories">Accessories</option>
-                </select>
+                  onChange={handleInputChange}
+                  disabled
+                />
               </p>
               <p>
                 <label>Quantity:</label>
@@ -194,12 +195,10 @@ const AddProduct = () => {
                   min={1}
                   value={product.quantity}
                   onChange={handleInputChange}
-                  required
                 />
               </p>
-
               <button type="submit" className="--btn --btn-primary --btn-block">
-                Add Product
+                Update Product
               </button>
             </form>
           </Card>
@@ -209,4 +208,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;

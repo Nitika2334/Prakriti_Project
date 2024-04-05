@@ -17,12 +17,6 @@ export const createProduct= asyncHandler( async(req,res)=>{
         name,description,price,category,quantity,userRef,productPhoto
     })
 
-    const admin=await User.findById(userRef);
-    if(admin){
-        admin.listedItems.push(product);
-        admin.save();
-    }
-
     res.status(201).json(product)
 })
 
@@ -79,6 +73,36 @@ export const getAdminProducts=asyncHandler(async(req,res)=>{
     res.status(200).json(products);
 })
 
+export const getCartProducts = asyncHandler(async (req, res) => {
+    const ids = [];
+    const cartItems = req.res.user.cartItems;
+
+    cartItems.forEach((item) => {
+        ids.push(item.product_id);
+    });
+
+    // Fetch products based on product IDs
+    const products = await Product.find({ _id: { $in: ids } });
+
+    if (!products) {
+        res.status(400);
+        throw new Error("No products found for this user");
+    }
+
+    // Map products to include quantity
+    const productsWithQuantity = products.map((product) => {
+        // Find quantity associated with product ID
+        const cartItem = cartItems.find((item) => item.product_id.toString() === product._id.toString());
+        // Return object with product data and quantity
+        return {
+            product: product,
+            quantity: cartItem ? cartItem.quantity : 0 // If cartItem exists, return its quantity, otherwise 0
+        };
+    });
+
+    res.status(200).json(productsWithQuantity);
+});
+
 
 export const deleteProduct=asyncHandler(async(req,res)=>{
     const product=await Product.findById(req.params.id);
@@ -93,17 +117,15 @@ export const deleteProduct=asyncHandler(async(req,res)=>{
 
 export const updateProduct=asyncHandler(async(req,res)=>{
     const {
-        name,description,price,category,quantity,productPhoto
+        description,price,quantity,productPhoto
     }=req.body;
 
     try {
         const product=await Product.findById(req.params.id);
         if(product){
-            product.name=name || product.name;
-            product.description=description || product.description;
-            product.price=price || product.price;
-            product.category=category || product.category;
-            product.quantity=quantity || product.quantity;
+            product.description = description || product.description;
+            product.price = price || product.price;
+            product.quantity = quantity || product.quantity;
             product.productPhoto=productPhoto || product.productPhoto;
             const updatedProduct=await product.save();
             res.status(200).json(updatedProduct);

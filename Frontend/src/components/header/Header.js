@@ -70,7 +70,7 @@ const Header = () => {
       <Link to="/cart">
         Cart
         <FaShoppingCart size={20} />
-        <p>{user?.cartItems.length}</p>
+        <p>{user?.cartItems?.length}</p>
       </Link>
     </span>
   );
@@ -100,7 +100,7 @@ const Header = () => {
                     "" 
                     :
                     <NavLink to={"shop"} className={activeLink}>
-                    shop
+                    Shop
                     </NavLink>
                   }
                 </li>

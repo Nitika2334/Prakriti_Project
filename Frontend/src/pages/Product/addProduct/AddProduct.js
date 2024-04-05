@@ -138,11 +138,12 @@ const AddProduct = () => {
                 <label>Change Photo:</label>
                 <input
                   type="file"
-                  accept="image/*"
+                  accept="image/png, image/jpeg, image/jpg"
                   name="productImage"
                   required
                   onChange={handleImageChange}
                 />
+
               </p>
               <p>
                 <label>Name:</label>

@@ -3,22 +3,34 @@ import Product from "../models/productModel.js"
 import { User } from "../models/userSchema.js";
 
 
-export const createProduct= asyncHandler( async(req,res)=>{
+export const createProduct = asyncHandler(async (req, res) => {
     const {
-        name,description,price,category,quantity,userRef,productPhoto
-    }=req.body;
+        name, description, price, category, quantity, userRef, productPhoto
+    } = req.body;
 
-    if(!name ||!category || !description || !productPhoto || !userRef){
+    // Check if name is provided and is a valid string
+    if (!name || typeof name !== 'string' || name.trim().length === 0) {
         res.status(400);
-        throw new Error("Please fill an all fields")
+        throw new Error("Name must be a valid non-empty string");
     }
 
-    const product=await Product.create({
-        name,description,price,category,quantity,userRef,productPhoto
-    })
+    // Check if name contains negative numbers
+    if (!/^[a-zA-Z\s-]*$/.test(name)) {
+        res.status(400);
+        throw new Error("Name can only contain letters, spaces, or hyphens");
+    }
 
-    res.status(201).json(product)
-})
+    if (!category || !description || !productPhoto || !userRef) {
+        res.status(400);
+        throw new Error("Please fill all fields");
+    }
+
+    const product = await Product.create({
+        name, description, price, category, quantity, userRef, productPhoto
+    });
+
+    res.status(201).json(product);
+});
 
 
 export const getProducts=asyncHandler(async(req,res)=>{

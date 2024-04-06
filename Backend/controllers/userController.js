@@ -11,25 +11,41 @@ const generateToken = (id) => {
     });
 }
 
-
 export const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password, role } = req.body;
     
+    // Check if name, email, password, and role are provided
     if (!name || !email || !password || !role) {
         res.status(400);
         throw new Error("Please fill in all required fields");
     }
+
+    // Check if password meets minimum length requirement
     if (password.length < 6) {
         res.status(400);
         throw new Error("Password must be at least 6 characters long");
     }
 
+    // Check if name contains only letters, spaces, or hyphens
+    if (!/^[a-zA-Z\s-]*$/.test(name)) {
+        res.status(400);
+        throw new Error("Name can only contain letters, spaces, or hyphens");
+    }
+
+    // Check if email is valid (You can use a more robust email validation method if needed)
+    if (!isValidEmail(email)) {
+        res.status(400);
+        throw new Error("Invalid email address");
+    }
+
+    // Check if email has already been registered
     const userExists = await User.findOne({ email });
     if (userExists) {
         res.status(400);
         throw new Error("Email has already been registered");
     }
 
+    // Create a new user object
     const user = new User({
         name,
         email,
@@ -38,13 +54,16 @@ export const registerUser = asyncHandler(async (req, res) => {
     });
 
     try {
+        // Save the new user to the database
         await user.save();
     } catch (error) {
         console.log(error);
     }
 
+    // Generate authentication token
     const token = generateToken(user._id);
 
+    // If user is successfully created, send response with user data and token
     if (user) {
         const { _id, name, email, role } = user;
         res.cookie("token", token, {
@@ -63,6 +82,38 @@ export const registerUser = asyncHandler(async (req, res) => {
         throw new Error("Invalid user data");
     }
 });
+
+// Function to validate email format and check for negative numbers
+function isValidEmail(email) {
+    // Use a regular expression or a more comprehensive email validation library
+    // This is a basic example, you might want to improve it for production use
+
+    // Check if email contains a negative number
+    if (email.includes("-")) {
+        return false;
+    }
+
+    // Check if email contains spaces
+    if (/\s/.test(email)) {
+        return false;
+    }
+
+    // Basic email format validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return false;
+    }
+
+    // Check if email contains a name before @ symbol
+    const atIndex = email.indexOf('@');
+    const name = email.substring(0, atIndex);
+    if (!/[a-zA-Z]/.test(name)) {
+        return false;
+    }
+
+    return true;
+}
+
+
 
 
 export const loginUser = async (req, res) => {
